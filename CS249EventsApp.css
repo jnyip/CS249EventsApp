@@ -20,3 +20,6 @@
     color: #E0E0E0;
 }
 
+ul {
+    list-style-type: none;
+}

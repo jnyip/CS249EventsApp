@@ -1,22 +1,51 @@
+// simple-todos.js
+Tasks = new Mongo.Collection("tasks");
+
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
-  
-  console.log("HELLO. PRISCILLA WAS HERE");
-
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
+  // This code only runs on the client
+  Template.body.helpers({
+    tasks: function () {
+      return Tasks.find({}, {sort: {createdAt: -1}});
     }
   });
+    // Inside the if (Meteor.isClient) block, right after Template.body.helpers:
+Template.body.events({
+  "submit .new-task": function(event){
+    // This function is called when the new task form is submitted
 
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
-    }
-  });
+    var text = event.target.text.value;
+
+    Tasks.insert({
+      text: text,
+      createdAt: new Date() // current time
+    });
+
+    // Clear form
+    event.target.text.value = "";
+
+    // Prevent default form submit
+    return false;
+  },
+ "submit .new-reply": function(event){
+     var value=event.target.text.value;
+     console.log(value);
+     return false;
+ }
+    
+    
+});
+Template.quickHelp.events({
+  "click .toggle-checked": function () {
+    // Set the checked property to the opposite of its current value
+    Tasks.update(this._id, {$set: {checked: ! this.checked}});
+  },
+  "click .delete": function () {
+    Tasks.remove(this._id);
+  }
+});
 }
+
+
 
 if (Meteor.isServer) {
   Meteor.startup(function () {

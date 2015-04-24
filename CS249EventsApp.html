@@ -7,10 +7,27 @@
 <div id='participant'>I am a participant</div>
 <div id='coordinator'>I am a coordinator</div>
 
-  {{> hello}}
+<section>
+  <form class="new-task">
+    <input type="text" name="text" placeholder="Type to add new tasks" />
+  </form>
+    <ul>
+      {{#each tasks}}
+        {{> quickHelp}}
+            <form class="new-reply">
+                <input type="text" name="repsonse" placeholder="Type to reply" />
+            </form>
+      {{/each}}
+    </ul>
+</section>
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="quickHelp">
+  <li class="{{#if checked}}checked{{/if}}">
+    <button class="delete">&times;</button>
+
+    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+
+    <span class="text">{{text}}</span>
+  </li>
 </template>
