@@ -43,12 +43,40 @@ Template.quickHelp.events({
     Tasks.remove(this._id);
   }
 });
+
+    console.log("HELLO. PRISCILLA WAS HERE");
+    Accounts.ui.config({
+        requestPermissions: {},
+        extraSignupFields: [{
+            fieldName: 'first-name',
+            fieldLabel: 'First name',
+            inputType: 'text',
+            visible: true,
+            validate: function(value, errorFunction) {
+              if (!value) {
+                errorFunction("Please write your first name");
+                return false;
+              } else {
+                return true;
+              }
+            }
+        }, {
+            fieldName: 'last-name',
+            fieldLabel: 'Last name',
+            inputType: 'text',
+            visible: true,
+        }, {
+            fieldName: 'coordinator',
+            fieldLabel: 'I am a coordinator',
+            inputType: 'checkbox',
+            visible: true,
+            saveToProfile: true
+        } ]
+    });
 }
 
 
 
 if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
-  });
+    
 }
