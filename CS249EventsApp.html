@@ -6,19 +6,40 @@
     <div class="navbar navbar-default" role="navigation">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#">Events Organizer</a>
+<!--
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
 				<span class="sr-only">Toggle navigation</span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
+-->
 		</div>
 		<div class="navbar-collapse collapse">
+            <a class="navbar-brand" id="home">Home</a>
+            <a class="navbar-brand" id="quickhelp">Quick Help</a>
+            
 			<ul class="nav navbar-nav navbar-right">
 				{{> loginButtons}} <!-- here -->
 			</ul>
 		</div>
 	</div>
+    
+    {{#if homepage}}
+    {{> home}}
+    {{/if}}
+    
+    {{#if quickHelpPage}}
+    {{> quickHelp}}
+    {{/if}}
+</body>
+
+<template name="home">
+<div> HOME PAGE</div>
+</template>
+
+<template name="quickHelp">
+    
     <section>
 		<div class="padding">
 			<form class="new-thread form-horizontal">
@@ -31,8 +52,8 @@
             </ul>
 		</div>
     </section>
-</body>
-
+</template>
+    
 <template name="oneThread">
 	<div class="list-group">
 		<li class="list-group-item {{#if active}}active{{/if}}">

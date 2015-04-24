@@ -1,13 +1,45 @@
 Threads = new Mongo.Collection("threads");
+Pages = new Mongo.Collection("pages");
+
 
 if (Meteor.isClient) { //This code only runs on the client
+    
+ 
+    
 	Template.body.helpers({
+        homepage: function() {
+            if (Pages.find().fetch().length != 0){
+                return Pages.findOne().home;
+            }
+        },
+        quickHelpPage: function() {
+            if (Pages.find().fetch().length != 0){
+                return Pages.findOne().quickHelp;
+            }
+        }
+    });
+    
+    Template.body.events({
+       "click #home": function() {
+            var id = Pages.find().fetch()[0]._id;
+            Pages.update(id, {$set: {home: true}});
+           Pages.update(id, {$set: {quickHelp: false}});
+       },
+         "click #quickhelp": function() {
+            var id = Pages.find().fetch()[0]._id;
+            Pages.update(id, {$set: {home: false}});
+           Pages.update(id, {$set: {quickHelp: true}});
+       }
+    });
+    
+    Template.quickHelp.helpers({
 		threads: function () {
 			return Threads.find({}, {sort: {createdAt: -1}});
 		}
 	});
 	
-	Template.body.events({
+    
+	Template.quickHelp.events({
 		"submit .new-thread": function(event){
 			event.preventDefault(); //prevents default form submit
 			var text = event.target.thread.value;
@@ -84,5 +116,11 @@ if (Meteor.isClient) { //This code only runs on the client
 }
 
 if (Meteor.isServer) {
-	
+          if (Pages.find().fetch().length == 0) {
+        Pages.insert({
+            home: true, 
+            quickHelp: false
+        });
+    }
+ 
 }
