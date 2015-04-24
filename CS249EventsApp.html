@@ -4,48 +4,49 @@
 
 <body>
     <div class="navbar navbar-default" role="navigation">
-    <div class="navbar-header">
-        <a class="navbar-brand" href="#">Events Organizer</a>
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-    </div>
-    <div class="navbar-collapse collapse">
-<!--
-        <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Link</a></li>
-        </ul>
--->
-        <ul class="nav navbar-nav navbar-right">
-            {{> loginButtons}} <!-- here -->
-        </ul>
-    </div>
-</div>
-    
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">Events Organizer</a>
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-right">
+				{{> loginButtons}} <!-- here -->
+			</ul>
+		</div>
+	</div>
     <section>
-      <form class="new-task">
-        <input type="text" name="text" placeholder="Type to add new tasks" />
-      </form>
+		<div class="shift-right">
+			<form class="new-thread form-horizontal">
+					<input class="form-control" type="text" name="thread" placeholder="Ask a question" />
+			</form>
+		</div>
         <ul>
-          {{#each tasks}}
-            {{> quickHelp}}
-                <form class="new-reply">
-                    <input type="text" name="repsonse" placeholder="Type to reply" />
-                </form>
+          {{#each threads}}
+			{{> oneThread}}
           {{/each}}
         </ul>
     </section>
 </body>
 
-<template name="quickHelp">
-  <li class="{{#if checked}}checked{{/if}}">
-    <button class="delete">&times;</button>
-
-    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
-
-    <span class="text">{{text}}</span>
-  </li>
+<template name="oneThread">
+	<div class="list-group">
+		<li class="list-group-item {{#if active}}active{{/if}}">
+			{{text}}  
+			<button type="button" class="close done green">✓</button>
+			<button type="button" class="close delete red">×</button>
+		</li>
+		{{#each responses}}
+			<li class="list-group-item">{{this}}</li>
+		{{/each}}
+		<li class="list-group-item">
+			<form class="new-response form-horizontal">
+				<input class="form-control" type="text" name="response" placeholder="Type to reply" />
+			</form>
+		</li>
+	</div>
 </template>

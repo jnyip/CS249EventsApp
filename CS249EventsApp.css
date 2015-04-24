@@ -23,3 +23,15 @@
 ul {
     list-style-type: none;
 }
+
+.green {
+	color: green;
+}
+
+.red {
+	color: red;
+}
+
+.shift-right {
+	padding-left: 40px !important;
+}
