@@ -3,14 +3,32 @@
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
+    <div class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">Events Organizer</a>
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    </div>
+    <div class="navbar-collapse collapse">
+<!--
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Link</a></li>
+        </ul>
+-->
+        <ul class="nav navbar-nav navbar-right">
+            {{> loginButtons}} <!-- here -->
+        </ul>
+    </div>
+</div>
+    
+<!--
 <div id='participant'>I am a participant</div>
 <div id='coordinator'>I am a coordinator</div>
 
   {{> hello}}
+-->
 </body>
-
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-</template>
