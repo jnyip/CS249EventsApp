@@ -20,16 +20,16 @@
 		</div>
 	</div>
     <section>
-		<div class="shift-right">
+		<div class="padding">
 			<form class="new-thread form-horizontal">
 					<input class="form-control" type="text" name="thread" placeholder="Ask a question" />
 			</form>
+            <ul>
+              {{#each threads}}
+                {{> oneThread}}
+              {{/each}}
+            </ul>
 		</div>
-        <ul>
-          {{#each threads}}
-			{{> oneThread}}
-          {{/each}}
-        </ul>
     </section>
 </body>
 
