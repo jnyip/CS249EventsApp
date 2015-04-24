@@ -1,0 +1,22 @@
+/* CSS declarations go here */
+#coordinator, #participant {
+    background-color: #3399FF;
+    text-align: center;
+    line-height: 100vh;
+    margin: auto;
+    float: left;
+    width: 50%;
+    height: 100vh;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+#participant {
+    background-color: #E0E0E0;
+    color:#3399FF;
+}
+
+#coordinator {
+    color: #E0E0E0;
+}
+
