@@ -44,7 +44,8 @@ if (Meteor.isClient) { //This code only runs on the client
 			event.preventDefault(); //prevents default form submit
 			var text = event.target.thread.value;
             var currentUserId = Meteor.userId();
-            var currentUserName = Meteor.user().profile.firstName + " " + Meteor.user().profile.lastName;
+            var currentUserName = Meteor.user().profile.firstName + " " 
+                                + Meteor.user().profile.lastName;
             var completeText = text + " - " + currentUserName;
 			Threads.insert({
 				text: completeText,
@@ -82,10 +83,20 @@ if (Meteor.isClient) { //This code only runs on the client
 		"submit .new-response": function(event){
 			event.preventDefault();
 			var text = event.target.response.value;
-            var currentUserId = Meteor.userId();
-            var currentUserName = Meteor.user().profile.firstName;
-            var completeText = text + " - " + currentUserName;
-			Threads.update(this._id, {$push: {createdby: currentUserId, responses: completeText}});
+            var userStatus = "";
+            if (Meteor.user().profile.coordinator){
+                userStatus = "Coordinator";
+            } else {
+                userStatus = "Participant";
+            }
+            var currentUser = Meteor.user().profile.firstName + " " 
+                                + Meteor.user().profile.lastName + ", " 
+                                + userStatus;
+            var completeText = text + " - " + currentUser;
+			Threads.update(this._id, {
+                $push: {createdby: currentUser, 
+                        responses: completeText}
+            });
 			event.target.response.value = "";
 		},
 		"click .done": function() {
@@ -118,7 +129,7 @@ if (Meteor.isClient) { //This code only runs on the client
 			fieldLabel: 'I am a coordinator',
 			inputType: 'checkbox',
 			visible: true,
-			saveToProfile: true
+			saveToProfile: false
 		} ]
 	});
 }
