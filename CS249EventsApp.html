@@ -19,6 +19,7 @@
             <a class="navbar-brand" id="home">Home</a>
             <a class="navbar-brand" id="quickhelp">Quick Help</a>
             <a class="navbar-brand" id="schedule">Schedule</a>
+			<a class="navbar-brand" id="manageEvents">Manage Events</a>
             
 			<ul class="nav navbar-nav navbar-right">
 				{{> loginButtons}} <!-- here -->
@@ -26,7 +27,7 @@
 		</div>
 	</div>
     
-    {{#if homepage}}
+    {{#if homePage}}
     {{> home}}
     {{/if}}
     
@@ -34,9 +35,13 @@
     {{> quickHelp}}
     {{/if}}
     
-    {{#if schedulepage}}
+    {{#if schedulePage}}
     {{> schedule}}
     {{/if}}
+	
+	{{#if manageEventsPage}}
+	{{> manageEvents}}
+	{{/if}}
 </body>
 
 <template name="home">
@@ -102,4 +107,41 @@
         </tbody>
     </table>
 
+</template>
+
+<template name="manageEvents">
+	<div class="col-md-6">
+		<form class="form-horizontal well">
+		<fieldset>
+			<legend>Add an Event</legend>
+			<div class="form-group">
+				<label for="inputName" class="col-lg-2 control-label">Event Name</label>
+				<div class="col-lg-10">
+					<input type="text" class="form-control" id="inputName" placeholder="Event Name">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="textArea" class="col-lg-2 control-label">Event Description</label>
+				<div class="col-lg-10">
+					<textarea class="form-control" rows="3" id="textArea"></textarea>
+					<span class="help-block">Add a description about your event.</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-lg-10 col-lg-offset-2">
+					<button type="reset" class="btn btn-default">Cancel</button>
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</fieldset>
+		</form>
+	</div>
+	<div class="col-md-6">
+		<div class="list-group">
+			<li class="list-group-item active">List of Events</li>
+			{{#each events}}
+				<li class="list-group-item">Event #{{this}}</li>
+			{{/each}}
+		</div>
+	</div>
 </template>

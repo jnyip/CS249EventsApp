@@ -7,7 +7,7 @@ if (Meteor.isClient) { //This code only runs on the client
  
     
 	Template.body.helpers({
-        homepage: function() {
+        homePage: function() {
             if (Pages.find().fetch().length != 0){
                 return Pages.findOne().home;
             }
@@ -17,31 +17,46 @@ if (Meteor.isClient) { //This code only runs on the client
                 return Pages.findOne().quickHelp;
             }
         },
-        schedulepage: function() {
+        schedulePage: function() {
             if (Pages.find().fetch().length != 0){
                 return Pages.findOne().schedule;
             }
-        }
+        },
+		manageEventsPage: function() {
+			if (Pages.find().fetch().length != 0){
+                return Pages.findOne().manageEvents;
+            }
+		}
     });
     
     Template.body.events({
        "click #home": function() {
-        var id = Pages.find().fetch()[0]._id;
-        Pages.update(id, {$set: {home: true}});
-        Pages.update(id, {$set: {quickHelp: false}});
-        Pages.update(id, {$set: {schedule: false}})
+			var id = Pages.find().fetch()[0]._id;
+			Pages.update(id, {$set: {home: true}});
+			Pages.update(id, {$set: {quickHelp: false}});
+			Pages.update(id, {$set: {schedule: false}});
+			Pages.update(id, {$set: {manageEvents: false}});
        },
          "click #quickhelp": function() {
-            var id = Pages.find().fetch()[0]._id;
-             Pages.update(id, {$set: {home: false}});
-             Pages.update(id, {$set: {quickHelp: true}});
-             Pages.update(id, {$set: {schedule: false}})
+			var id = Pages.find().fetch()[0]._id;
+			Pages.update(id, {$set: {home: false}});
+			Pages.update(id, {$set: {quickHelp: true}});
+			Pages.update(id, {$set: {schedule: false}});
+			Pages.update(id, {$set: {manageEvents: false}});
        },
         "click  #schedule": function() {
             var id = Pages.find().fetch()[0]._id;
             Pages.update(id, {$set: {schedule: true}});
             Pages.update(id, {$set: {quickHelp: false}});
-            Pages.update(id, {$set: {home: false}})
+            Pages.update(id, {$set: {home: false}});
+			Pages.update(id, {$set: {manageEvents: false}});
+        },
+		"click  #manageEvents": function() {
+            var id = Pages.find().fetch()[0]._id;
+            Pages.update(id, {$set: {schedule: false}});
+            Pages.update(id, {$set: {quickHelp: false}});
+            Pages.update(id, {$set: {home: false}});
+			Pages.update(id, {$set: {manageEvents: true}});
         }
     });
     
@@ -118,6 +133,12 @@ if (Meteor.isClient) { //This code only runs on the client
 			Threads.update(this._id, {$set: {active: !this.active}});
 		}
 	});
+	
+	Template.manageEvents.helpers({
+		events: function() {
+			return [1,2,3,4,5];
+		}
+	});
 
 	Accounts.ui.config({
 		requestPermissions: {},
@@ -150,11 +171,12 @@ if (Meteor.isClient) { //This code only runs on the client
 }
 
 if (Meteor.isServer) {
-          if (Pages.find().fetch().length == 0) {
+    if (Pages.find().fetch().length == 0) {
         Pages.insert({
             home: true, 
             quickHelp: false,
-            schedule: false
+            schedule: false,
+			manageEvents: false
         });
     }
  
