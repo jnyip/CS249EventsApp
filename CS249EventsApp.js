@@ -45,7 +45,7 @@ if (Meteor.isClient) { //This code only runs on the client
 			var text = event.target.thread.value;
             var currentUserId = Meteor.userId();
             var currentUserName = Meteor.user().profile.firstName + " " + Meteor.user().profile.lastName;
-            var completeText = text + " - " + currentUserName;
+            var completeText = currentUserName + ": " + text;
 			Threads.insert({
 				text: completeText,
 				createdAt: new Date(), // current time
@@ -67,8 +67,11 @@ if (Meteor.isClient) { //This code only runs on the client
 		active: function() {
 			var thisThread = Threads.find(this._id).fetch();
 			return thisThread[0].active;
+		},
+		newQ: function() {
+			var thisThread = Threads.find(this._id).fetch();
+			return (thisThread[0].responses.length==0);
 		}
-		
 	});
 
 	Template.oneThread.events({
@@ -83,8 +86,8 @@ if (Meteor.isClient) { //This code only runs on the client
 			event.preventDefault();
 			var text = event.target.response.value;
             var currentUserId = Meteor.userId();
-            var currentUserName = Meteor.user().profile.firstName;
-            var completeText = text + " - " + currentUserName;
+            var currentUserName = Meteor.user().profile.firstName + " " + Meteor.user().profile.lastName;
+            var completeText = currentUserName + ": " + text;
 			Threads.update(this._id, {$push: {createdby: currentUserId, responses: completeText}});
 			event.target.response.value = "";
 		},

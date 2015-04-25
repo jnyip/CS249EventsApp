@@ -38,6 +38,18 @@ ul {
 	padding-right: 40px !important;
 }
 
+
 .blue {
     color: blue;
 }
+
+.newQuestion{
+	background-color: #f0ad4e !important;
+	border-color: #f0ad4e !important;
+}
+
+.oldQuestion{
+	background-color: #bbb !important;
+	border-color: #bbb !important;
+}
+
