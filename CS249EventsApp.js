@@ -151,6 +151,9 @@ if (Meteor.isClient) { //This code only runs on the client
 				createdBy: userId,
 				coordinator: userName
 			});
+		},
+		"click .remove": function() {
+			Events.remove(this._id);
 		}
 	});
 
