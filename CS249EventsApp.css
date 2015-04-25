@@ -37,3 +37,13 @@ ul {
 	padding-left: 40px !important;
 	padding-right: 40px !important;
 }
+
+.newQuestion{
+	background-color: #f0ad4e !important;
+	border-color: #f0ad4e !important;
+}
+
+.oldQuestion{
+	background-color: #bbb !important;
+	border-color: #bbb !important;
+}

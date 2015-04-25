@@ -44,8 +44,8 @@
     
     <section>
 		<div class="padding">
-			<form class="new-thread form-horizontal">
-					<input class="form-control" type="text" name="thread" placeholder="Ask a question" />
+			<form class="new-thread form-horizontal" style="padding-bottom: 40px !important;">
+					<input class="form-control input-lg" type="text" name="thread" placeholder="Ask a question" />
 			</form>
             <ul>
               {{#each threads}}
@@ -59,7 +59,7 @@
 <template name="oneThread">
     {{#if currentUser}}
         <div class="list-group">
-            <li class="list-group-item {{#if active}}active{{/if}}">
+            <li class="list-group-item {{#if active}}active{{else}}oldQuestion{{/if}} {{#if newQ}}newQuestion{{/if}}">
                 {{text}}  
                 <button type="button" class="close done green">✓</button>
                 <button type="button" class="close delete red">×</button>
