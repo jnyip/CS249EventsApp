@@ -43,11 +43,16 @@ if (Meteor.isClient) { //This code only runs on the client
 		"submit .new-thread": function(event){
 			event.preventDefault(); //prevents default form submit
 			var text = event.target.thread.value;
+            var currentUserId = Meteor.userId();
+            var currentUserName = Meteor.user().profile.firstName + " " + Meteor.user().profile.lastName;
+            var completeText = text + " - " + currentUserName;
 			Threads.insert({
-				text: text,
+				text: completeText,
 				createdAt: new Date(), // current time
+                initialCreatedBy: currentUserId,
 				responses: [],
-				active: true
+				active: true,
+//                user: this.userID;
 			});
 			event.target.thread.value = ""; //clear form
 			//return false; //prevents default form submit, but won't work if error above
@@ -77,7 +82,10 @@ if (Meteor.isClient) { //This code only runs on the client
 		"submit .new-response": function(event){
 			event.preventDefault();
 			var text = event.target.response.value;
-			Threads.update(this._id, {$push: {responses: text}});
+            var currentUserId = Meteor.userId();
+            var currentUserName = Meteor.user().profile.firstName;
+            var completeText = text + " - " + currentUserName;
+			Threads.update(this._id, {$push: {createdby: currentUserId, responses: completeText}});
 			event.target.response.value = "";
 		},
 		"click .done": function() {
@@ -88,7 +96,7 @@ if (Meteor.isClient) { //This code only runs on the client
 	Accounts.ui.config({
 		requestPermissions: {},
 		extraSignupFields: [{
-			fieldName: 'first-name',
+			fieldName: 'firstName',
 			fieldLabel: 'First name',
 			inputType: 'text',
 			visible: true,
@@ -101,7 +109,7 @@ if (Meteor.isClient) { //This code only runs on the client
 			  }
 			}
 		}, {
-			fieldName: 'last-name',
+			fieldName: 'lastName',
 			fieldLabel: 'Last name',
 			inputType: 'text',
 			visible: true,
