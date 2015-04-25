@@ -16,20 +16,33 @@ if (Meteor.isClient) { //This code only runs on the client
             if (Pages.find().fetch().length != 0){
                 return Pages.findOne().quickHelp;
             }
+        },
+        schedulepage: function() {
+            if (Pages.find().fetch().length != 0){
+                return Pages.findOne().schedule;
+            }
         }
     });
     
     Template.body.events({
        "click #home": function() {
-            var id = Pages.find().fetch()[0]._id;
-            Pages.update(id, {$set: {home: true}});
-           Pages.update(id, {$set: {quickHelp: false}});
+        var id = Pages.find().fetch()[0]._id;
+        Pages.update(id, {$set: {home: true}});
+        Pages.update(id, {$set: {quickHelp: false}});
+        Pages.update(id, {$set: {schedule: false}})
        },
          "click #quickhelp": function() {
             var id = Pages.find().fetch()[0]._id;
-            Pages.update(id, {$set: {home: false}});
-           Pages.update(id, {$set: {quickHelp: true}});
-       }
+             Pages.update(id, {$set: {home: false}});
+             Pages.update(id, {$set: {quickHelp: true}});
+             Pages.update(id, {$set: {schedule: false}})
+       },
+        "click  #schedule": function() {
+            var id = Pages.find().fetch()[0]._id;
+            Pages.update(id, {$set: {schedule: true}});
+            Pages.update(id, {$set: {quickHelp: false}});
+            Pages.update(id, {$set: {home: false}})
+        }
     });
     
     Template.quickHelp.helpers({
@@ -130,7 +143,8 @@ if (Meteor.isServer) {
           if (Pages.find().fetch().length == 0) {
         Pages.insert({
             home: true, 
-            quickHelp: false
+            quickHelp: false,
+            schedule: false
         });
     }
  

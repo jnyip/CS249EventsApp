@@ -43,12 +43,12 @@ ul {
     color: blue;
 }
 
-.newQuestion{
+.newQuestion {
 	background-color: #f0ad4e !important;
 	border-color: #f0ad4e !important;
 }
 
-.oldQuestion{
+.oldQuestion {
 	background-color: #bbb !important;
 	border-color: #bbb !important;
 }
