@@ -55,19 +55,21 @@
 </template>
     
 <template name="oneThread">
-	<div class="list-group">
-		<li class="list-group-item {{#if active}}active{{/if}}">
-			{{text}}  
-			<button type="button" class="close done green">✓</button>
-			<button type="button" class="close delete red">×</button>
-		</li>
-		{{#each responses}}
-			<li class="list-group-item">{{this}}</li>
-		{{/each}}
-		<li class="list-group-item">
-			<form class="new-response form-horizontal">
-				<input class="form-control" type="text" name="response" placeholder="Type to reply" />
-			</form>
-		</li>
-	</div>
+    {{#if currentUser}}
+        <div class="list-group">
+            <li class="list-group-item {{#if active}}active{{/if}}">
+                {{text}}  
+                <button type="button" class="close done green">✓</button>
+                <button type="button" class="close delete red">×</button>
+            </li>
+            {{#each responses}}
+                <li class="list-group-item">{{this}}</li>
+            {{/each}}
+            <li class="list-group-item">
+                <form class="new-response form-horizontal">
+                    <input class="form-control" type="text" name="response" placeholder="Type to reply" />
+                </form>
+            </li>
+        </div>
+    {{/if}}
 </template>
