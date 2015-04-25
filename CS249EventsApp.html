@@ -77,12 +77,26 @@
 </template>
 
 <template name="schedule">
-    <table>
-        <tr>
-            <td>Time</td>
-            <td>Event</td>
-            <td>Location</td>
-        </tr>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <td>Time</td>
+                <td>Event</td>
+                <td>Location<button type="button" class="add close blue">+</button></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            
+            <tr class="warning">
+            </tr>
+            <tr class="info">
+            </tr>
+        </tbody>
     </table>
 
 </template>
