@@ -111,19 +111,19 @@
 
 <template name="manageEvents">
 	<div class="col-md-6">
-		<form class="form-horizontal well">
+		<form class="form-horizontal well eventsForm">
 		<fieldset>
 			<legend>Add an Event</legend>
 			<div class="form-group">
-				<label for="inputName" class="col-lg-2 control-label">Event Name</label>
-				<div class="col-lg-10">
-					<input type="text" class="form-control" id="inputName" placeholder="Event Name">
+				<label for="inputName" class="col-lg-3 control-label">Event Name</label>
+				<div class="col-lg-9">
+					<input type="text" class="form-control" id="inputName" name="eName" placeholder="Event Name">
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="textArea" class="col-lg-2 control-label">Event Description</label>
-				<div class="col-lg-10">
-					<textarea class="form-control" rows="3" id="textArea"></textarea>
+				<label for="textArea" class="col-lg-3 control-label">Event Description</label>
+				<div class="col-lg-9">
+					<textarea class="form-control" rows="3" id="textArea" name="eDescript"></textarea>
 					<span class="help-block">Add a description about your event.</span>
 				</div>
 			</div>
@@ -140,7 +140,7 @@
 		<div class="list-group">
 			<li class="list-group-item active">List of Events</li>
 			{{#each events}}
-				<li class="list-group-item">Event #{{this}}</li>
+				<li class="list-group-item">Event #{{this.name}}</li>
 			{{/each}}
 		</div>
 	</div>

@@ -1,11 +1,8 @@
 Threads = new Mongo.Collection("threads");
 Pages = new Mongo.Collection("pages");
-
+Events = new Mongo.Collection("events");
 
 if (Meteor.isClient) { //This code only runs on the client
-    
- 
-    
 	Template.body.helpers({
         homePage: function() {
             if (Pages.find().fetch().length != 0){
@@ -136,7 +133,24 @@ if (Meteor.isClient) { //This code only runs on the client
 	
 	Template.manageEvents.helpers({
 		events: function() {
-			return [1,2,3,4,5];
+			return Events.find().fetch();
+		}
+	});
+	
+	Template.manageEvents.events({
+		"submit .eventsForm": function() {
+			event.preventDefault();
+			var eName = event.target.eName.value;
+			var eDescript = event.target.eDescript.value;
+			var userId = Meteor.userId();
+			var userName = Meteor.user().profile.firstName + " " + Meteor.user().profile.lastName;
+			
+			Events.insert({
+				name: eName,
+				description: eDescript,
+				createdBy: userId,
+				coordinator: userName
+			});
 		}
 	});
 
