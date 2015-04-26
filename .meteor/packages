@@ -10,4 +10,10 @@ insecure
 ian:accounts-ui-bootstrap-3
 accounts-password
 twbs:bootstrap
+<<<<<<< HEAD
 tsega:bootstrap3-datetimepicker
+=======
+jquery
+mrt:jquery-ui
+rajit:bootstrap3-datepicker
+>>>>>>> eee20681392be46b8e264aa4b50a2eebbbb378c5

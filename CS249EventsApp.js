@@ -1,6 +1,7 @@
 Threads = new Mongo.Collection("threads");
 Pages = new Mongo.Collection("pages");
 Events = new Mongo.Collection("events");
+Calender= new Mongo.Collection("calender");
 
 if (Meteor.isClient) { //This code only runs on the client
 	Template.body.helpers({
@@ -192,6 +193,29 @@ if (Meteor.isClient) { //This code only runs on the client
 			saveToProfile: false
 		} ]
 	});
+    Template.schedule.events({
+        "click .add": function(){
+            $(".scheduleForm").css("display","initial");
+            $("#datepicker").datepicker({
+                orientation: "top auto"
+            });
+        },
+        "submit #fillSchedule": function(e){
+            e.preventDefault();
+             $(".scheduleForm").css("display","none");
+            var eventName=event.target.inputEvent.value;
+            var location=event.target.inputLocation.value;
+            var time=event.target.inputTime.value;
+            var userId = Meteor.userId();
+            Calender.insert({
+				event: eventName,
+				location: location,
+				time: new Date(time),
+				createdBy: userId 
+			});
+           
+        }
+    })
 }
 
 if (Meteor.isServer) {
