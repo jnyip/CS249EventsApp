@@ -236,7 +236,45 @@ if (Meteor.isClient) { //This code only runs on the client
 		"click .remove": function() {
 			Events.remove(this._id);
 		}
+	});     
+    Template.addEvents.helpers({
+		events: function() {
+			return Events.find().fetch();
+		},
+		createdByUser: function() {
+			return (this.createdBy == Meteor.userId());
+		}
 	});
+    Template.addEvents.events({
+		"submit .eventsForm": function(event) {
+			event.preventDefault();
+			var eName = event.target.eName.value;
+			var eDescript = event.target.eDescript.value;
+			var startT = event.target.startTime.value;
+			var endT = event.target.endTime.value;
+			var userId = Meteor.userId();
+			var userName = Meteor.user().profile.firstName + " " + Meteor.user().profile.lastName;
+            var share= event.target.eShare.value;
+            var cleanedShare=share.split(';');
+            for (var i in cleanedShare){
+                cleanedShare[i]=cleanedShare[i].trim();
+            }
+            $(".eventsForm")[0].reset();
+			Events.insert({
+				name: eName,
+				description: eDescript,
+				startTime: startT,
+				endTime: endT,
+				createdBy: userId,
+                sharedWith: cleanedShare,
+				coordinator: userName
+			});
+		},
+		"click .remove": function() {
+			Events.remove(this._id);
+		}
+	});            
+            
 
 	Accounts.ui.config({
 		requestPermissions: {},
@@ -267,6 +305,7 @@ if (Meteor.isClient) { //This code only runs on the client
 //			saveToProfile: false
 		} ]
 	});
+        
 }
 
 if (Meteor.isServer) {

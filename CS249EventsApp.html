@@ -33,7 +33,7 @@
     {{/if}}
 	
 	{{#if manageEventsPage}}
-	{{> manageEvents}}
+	{{> addEvents}}
 	{{/if}}
 </body>
 
@@ -251,6 +251,101 @@
 		</div>
 		{{/each}}
 	</div>
+	{{else}}
+	{{> plsLogin}}
+	{{/if}}
+</template>
+<template name="addEvents">
+	{{#if currentUser}}
+	<div class="col-md-7">
+		<form class="form-horizontal well eventsForm">
+		<fieldset>
+			<legend>Add an Event</legend>
+			<div class="form-group">
+				<label for="inputName" class="col-lg-3 control-label">Event Name</label>
+				<div class="col-lg-9">
+					<input type="text" class="form-control" id="inputName" name="eName" placeholder="Event Name">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="textArea" class="col-lg-3 control-label">Event Description</label>
+				<div class="col-lg-9">
+					<textarea class="form-control" rows="3" id="textArea" name="eDescript"></textarea>
+					<span class="help-block">Add a description about your event.</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="startTime" class="col-lg-3 control-label">Start Date</label>
+				<div class='input-group date col-lg-9' id='startTime'>
+					<input type='text' class="form-control" name="startTime"/>
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+			</div>
+			<script type="text/javascript">
+				$(function () {
+					$('#startTime').datetimepicker();
+				});
+			</script>
+			<div class="form-group">
+				<label for="endTime" class="col-lg-3 control-label">End Date</label>
+				<div class='input-group date col-lg-9' id='endTime'>
+					<input type='text' class="form-control" name="endTime" />
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+			</div>
+            <div class="form-group">
+				<label for="share" class="col-lg-3 control-label">Share With</label>
+				<div class="col-lg-9">
+					<textarea class="form-control" rows="3" id="share" name="eShare"></textarea>
+					<span class="help-block">Add an e-mail to share the event (for multiple people, please separate e-mails with semi-colon).
+                    </span>
+				</div>
+			</div>
+			<script type="text/javascript">
+				$(function () {
+					$('#endTime').datetimepicker();
+				});
+			</script>
+			<div class="form-group">
+				<div class="col-lg-10 col-lg-offset-3">
+					<button type="reset" class="btn btn-default">Cancel</button>
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</fieldset>
+		</form>
+        
+	</div>
+				
+    <div class="panel-group col-md-5" id="accordion" role="tablist" aria-multiselectable="true">
+		<div class="list-group">
+			<li class="list-group-item active">List of Events</li>
+		</div>
+		{{#each events}}
+		<div class="panel panel-default">
+			<div class="panel-heading" role="tab">
+				<h4 class="panel-title">
+				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#{{this._id}}" aria-expanded="false" aria-controls="collapseTwo">
+					{{this.name}}
+					{{#if createdByUser}}
+					<button type="button" class="close remove">×</button>
+					{{/if}}
+				</a>
+				</h4>
+			</div>
+			<div id="{{this._id}}" class="panel-collapse collapse" role="tabpanel">
+				<div class="panel-body">
+				{{this.description}}
+				</div>
+			</div>
+		</div>
+		{{/each}}
+	</div>
+	
 	{{else}}
 	{{> plsLogin}}
 	{{/if}}
