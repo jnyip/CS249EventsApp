@@ -10,3 +10,6 @@ insecure
 ian:accounts-ui-bootstrap-3
 accounts-password
 twbs:bootstrap
+jquery
+mrt:jquery-ui
+rajit:bootstrap3-datepicker
