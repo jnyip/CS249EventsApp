@@ -97,13 +97,13 @@
             </tr>
         </thead>
         <tbody>
-			<tr>
+			<tr class="info">
 			<!-- <form id="fillSchedule" class="form-horizontal"> -->
 				<td><input type="text" class="form-control" id="datepicker" name="inputTime"></td>
 				<td><input type="text" class="form-control" id="inputEvent" name="inputEvent" placeholder="Event"></td>
 				<td>
-					<input type="text" class="form-control" id="inputLocation" name="inputLocation" placeholder="Location">
-					<button type="button" class="add close blue">+</button>
+					<div class="col-md-11"><input type="text" class="form-control" id="inputLocation" name="inputLocation" placeholder="Location"></div>
+					<div class="col-md-1"><button type="button" class="add close blue">+</button></div>
 				</td>
 
 			<!-- </form> -->
@@ -115,7 +115,10 @@
 			<tr>
 				<td>{{timeDateString}}</td>
 				<td>{{this.event}}</td>
-				<td>{{this.location}}<button type="button" class="close remove">×</button></td>
+				<td>
+					<div class="col-md-11">{{this.location}}</div>
+					<div class="col-md-1"><button type="button" class="close remove">×</button></div>
+				</td>
 			</tr>
 			{{/each}}
         </tbody>

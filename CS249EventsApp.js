@@ -157,6 +157,49 @@ if (Meteor.isClient) { //This code only runs on the client
 				createdBy: userId 
 			});          
         },
+		//"submit #inputEvent": function() {
+		"keypress #inputEvent": function (event) {
+			if (event.which == 13) {
+				var eventName = document.getElementById("inputEvent").value;
+				var location = document.getElementById("inputLocation").value;
+				var time = document.getElementById("datepicker").value;
+				var userId = Meteor.userId();
+				Calendar.insert({
+					event: eventName,
+					location: location,
+					time: new Date(time),
+					createdBy: userId 
+				});  
+			}
+		},
+		"keypress #inputLocation": function (event) {
+			if (event.which == 13) {
+				var eventName = document.getElementById("inputEvent").value;
+				var location = document.getElementById("inputLocation").value;
+				var time = document.getElementById("datepicker").value;
+				var userId = Meteor.userId();
+				Calendar.insert({
+					event: eventName,
+					location: location,
+					time: new Date(time),
+					createdBy: userId 
+				});  
+			} 
+		},
+		"keypress #datepicker": function (event) {
+			if (event.which == 13) {
+				var eventName = document.getElementById("inputEvent").value;
+				var location = document.getElementById("inputLocation").value;
+				var time = document.getElementById("datepicker").value;
+				var userId = Meteor.userId();
+				Calendar.insert({
+					event: eventName,
+					location: location,
+					time: new Date(time),
+					createdBy: userId 
+				});  
+			} 
+		},
 		"click .remove": function() {
 			Calendar.remove(this._id);
 		}
@@ -226,13 +269,5 @@ if (Meteor.isClient) { //This code only runs on the client
 }
 
 if (Meteor.isServer) {
-//    if (Pages.find().fetch().length == 0) {
-//        Pages.insert({
-//            home: true, 
-//            quickHelp: false,
-//            schedule: false,
-//			manageEvents: false
-//        });
-//    },
-        
+  
 }
