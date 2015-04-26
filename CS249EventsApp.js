@@ -134,6 +134,9 @@ if (Meteor.isClient) { //This code only runs on the client
 	Template.manageEvents.helpers({
 		events: function() {
 			return Events.find().fetch();
+		},
+		createdByUser: function() {
+			return (this.createdBy == Meteor.userId());
 		}
 	});
 	
@@ -142,12 +145,16 @@ if (Meteor.isClient) { //This code only runs on the client
 			event.preventDefault();
 			var eName = event.target.eName.value;
 			var eDescript = event.target.eDescript.value;
+			var startT = event.target.startTime.value;
+			var endT = event.target.endTime.value;
 			var userId = Meteor.userId();
 			var userName = Meteor.user().profile.firstName + " " + Meteor.user().profile.lastName;
 			
 			Events.insert({
 				name: eName,
 				description: eDescript,
+				startTime: startT,
+				endTime: endT,
 				createdBy: userId,
 				coordinator: userName
 			});

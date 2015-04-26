@@ -53,3 +53,7 @@ ul {
 	border-color: #bbb !important;
 }
 
+#startTime, #endTime {
+	padding-left: 15px !important;
+	padding-right: 15px !important;
+}
