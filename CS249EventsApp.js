@@ -1,7 +1,7 @@
 Threads = new Mongo.Collection("threads");
 Pages = new Mongo.Collection("pages");
 Events = new Mongo.Collection("events");
-Calender= new Mongo.Collection("calender");
+Calendar = new Mongo.Collection("calendar");
 
 if (Meteor.isClient) { //This code only runs on the client
 	Template.body.helpers({
@@ -29,7 +29,7 @@ if (Meteor.isClient) { //This code only runs on the client
     
     Template.body.events({
        "click #home": function() {
-			var id = Pages.find().fetch()[0]._id;
+			var id = Pages.findOne()._id;
 			Pages.update(id, {$set: {home: true}});
 			Pages.update(id, {$set: {quickHelp: false}});
 			Pages.update(id, {$set: {schedule: false}});
@@ -132,6 +132,42 @@ if (Meteor.isClient) { //This code only runs on the client
 		}
 	});
 	
+	Template.schedule.helpers({
+		calendar: function() {
+			return Calendar.find().fetch();
+		},
+		timeDateString: function() {
+			return this.time.toLocaleDateString();
+		}
+	});
+	
+	Template.schedule.events({
+        // "click .add": function(){
+            // //$(".scheduleForm").css("display","initial");
+            // $("#datepicker").datepicker({
+                // orientation: "top auto"
+            // });
+        // },
+        //"submit #fillSchedule": function(e){
+		"click .add": function() {
+			//e.preventDefault();
+             //$(".scheduleForm").css("display","none");
+            var eventName = document.getElementById("inputEvent").value;
+            var location = document.getElementById("inputLocation").value;
+            var time = document.getElementById("datepicker").value;
+            var userId = Meteor.userId();
+            Calendar.insert({
+				event: eventName,
+				location: location,
+				time: new Date(time),
+				createdBy: userId 
+			});          
+        },
+		"click .remove": function() {
+			Calendar.remove(this._id);
+		}
+    });
+	
 	Template.manageEvents.helpers({
 		events: function() {
 			return Events.find().fetch();
@@ -193,29 +229,6 @@ if (Meteor.isClient) { //This code only runs on the client
 			saveToProfile: false
 		} ]
 	});
-    Template.schedule.events({
-        "click .add": function(){
-            $(".scheduleForm").css("display","initial");
-            $("#datepicker").datepicker({
-                orientation: "top auto"
-            });
-        },
-        "submit #fillSchedule": function(e){
-            e.preventDefault();
-             $(".scheduleForm").css("display","none");
-            var eventName=event.target.inputEvent.value;
-            var location=event.target.inputLocation.value;
-            var time=event.target.inputTime.value;
-            var userId = Meteor.userId();
-            Calender.insert({
-				event: eventName,
-				location: location,
-				time: new Date(time),
-				createdBy: userId 
-			});
-           
-        }
-    })
 }
 
 if (Meteor.isServer) {

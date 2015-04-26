@@ -5,18 +5,10 @@
 <body>
     <div class="navbar navbar-default" role="navigation">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#">Events Organizer</a>
-<!--
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
--->
+			<a class="navbar-brand" id="home">Events Organizer</a>
 		</div>
 		<div class="navbar-collapse collapse">
-            <a class="navbar-brand" id="home">Home</a>
+           <!--  <a class="navbar-brand" id="home">Home</a> -->
             <a class="navbar-brand" id="quickhelp">Quick Help</a>
             <a class="navbar-brand" id="schedule">Schedule</a>
 			<a class="navbar-brand" id="manageEvents">Manage Events</a>
@@ -100,13 +92,34 @@
             <tr>
                 <td>Time</td>
                 <td>Event</td>
-                <td>Location<button type="button" class="add close blue">+</button></td>
+                <td>Location<!-- <button type="button" class="add close blue">+</button> --></td>
             </tr>
         </thead>
         <tbody>
+			<tr>
+			<!-- <form id="fillSchedule" class="form-horizontal"> -->
+				<td><input type="text" class="form-control" id="datepicker" name="inputTime"></td>
+				<td><input type="text" class="form-control" id="inputEvent" name="inputEvent" placeholder="Event"></td>
+				<td>
+					<input type="text" class="form-control" id="inputLocation" name="inputLocation" placeholder="Location">
+					<button type="button" class="add close blue">+</button>
+				</td>
+
+			<!-- </form> -->
+			</tr>
+			<script>
+				 $("#datepicker").datepicker({orientation: "top auto"});
+			</script>
+			{{#each calendar}}
+			<tr>
+				<td>{{timeDateString}}</td>
+				<td>{{this.event}}</td>
+				<td>{{this.location}}<button type="button" class="close remove">×</button></td>
+			</tr>
+			{{/each}}
         </tbody>
     </table>
-    <div class="col-md-8 scheduleForm">
+    <!-- <div class="col-md-8 scheduleForm">
         <form id="fillSchedule" class="form-horizontal">
             <fieldset>
             <legend>Add to Schedule</legend>
@@ -136,7 +149,7 @@
             
             </fieldset>
         </form>
-    </div>
+    </div> -->
 	{{else}}
 	{{> plsLogin}}
 	{{/if}}
