@@ -253,6 +253,7 @@ if (Meteor.isClient) { //This code only runs on the client
 			visible: true,
 			validate: function(value, errorFunction) {
 			  if (!value) {
+                  console.log("Ths is the value: " + value);
 				errorFunction("Please write your first name");
 				return false;
 			  } else {
@@ -264,12 +265,12 @@ if (Meteor.isClient) { //This code only runs on the client
 			fieldLabel: 'Last name',
 			inputType: 'text',
 			visible: true,
-		}, {
-			fieldName: 'coordinator',
-			fieldLabel: 'I am a coordinator',
-			inputType: 'checkbox',
-			visible: true,
-			saveToProfile: false
+//		}, {
+//			fieldName: 'coordinator',
+//			fieldLabel: 'I am a coordinator',
+//			inputType: 'checkbox',
+//			visible: true,
+//			saveToProfile: false
 		} ]
 	});
 }
