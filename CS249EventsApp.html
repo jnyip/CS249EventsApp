@@ -11,6 +11,7 @@
 			{{#if currentUser}}
            <!--  <a class="navbar-brand" id="home">Home</a> -->
             <a class="navbar-brand" id="manageEvents">Manage Events</a>
+			<a class="navbar-brand" id="attendEvent">Attend an Event</a>
             <a class="navbar-brand" id="quickhelp">Quick Help</a>
             <a class="navbar-brand" id="schedule">Schedule</a>
             {{/if}}
@@ -35,6 +36,10 @@
 	{{#if manageEventsPage}}
 	{{> addEvents}}
 	{{/if}}
+	
+	{{#if attendEventPage}}
+	{{> attendEvent}}
+	{{/if}}
 </body>
 
 <template name="plsLogin">
@@ -45,8 +50,21 @@
 	<div> HOME PAGE</div>
 </template>
 
+<template name="currentEvent">
+	{{#if isNull}}
+	<div class="alert alert-danger margin">
+		<h4>Please <a class="alert-link" id="attendEvent">select an event to attend</a></h4>
+	</div>	
+	{{else}}
+	<div class="alert alert-success margin">
+		<h4>Event: {{currentEvent}}</h4>
+	</div>
+	{{/if}}
+</template>
+
 <template name="quickHelp">
     {{#if currentUser}}
+	{{> currentEvent}}
     <section>
 		<div class="padding">
 			<form class="new-thread form-horizontal" style="padding-bottom: 40px !important;">
@@ -88,7 +106,8 @@
 
 <template name="schedule">
 	{{#if currentUser}}
-    <table class="table table-striped table-hover">
+	{{> currentEvent}}
+    <table class="table table-striped table-hover col-md-12">
         <thead>
             <tr>
                 <td>Time</td>
@@ -105,12 +124,8 @@
 					<div class="col-md-11"><input type="text" class="form-control" id="inputLocation" name="inputLocation" placeholder="Location"></div>
 					<div class="col-md-1"><button type="button" class="add close blue">+</button></div>
 				</td>
-
-			<!-- </form> -->
 			</tr>
-			<script>
-				 $("#datepicker").datepicker({orientation: "top auto"});
-			</script>
+			<script>$("#datepicker").datepicker({orientation: "top auto"});</script>
 			{{#each calendar}}
 			<tr>
 				<td>{{timeDateString}}</td>
@@ -123,37 +138,6 @@
 			{{/each}}
         </tbody>
     </table>
-    <!-- <div class="col-md-8 scheduleForm">
-        <form id="fillSchedule" class="form-horizontal">
-            <fieldset>
-            <legend>Add to Schedule</legend>
-            <div class="form-group">
-                <label for="inputEvent" class="col-lg-2 control-label">Event</label>
-                <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputEvent" name="inputEvent" placeholder="Event">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="inputLocation" class="col-lg-2 control-label">Location</label>
-                <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputLocation" name="inputLocation" placeholder="Location">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="datepicker" class="col-lg-2 control-label">Time</label>
-                <div class="col-lg-10">
-                <input type="text" class="form-control" id="datepicker" name="inputTime">
-                </div>
-            <div class="form-group">
-				<div class="col-lg-10 col-lg-offset-10">
-					<button type="submit" class="btn btn-primary">Submit</button>
-				</div>
-			</div>
-            </div>
-            
-            </fieldset>
-        </form>
-    </div> -->
 	{{else}}
 	{{> plsLogin}}
 	{{/if}}
@@ -255,6 +239,7 @@
 	{{> plsLogin}}
 	{{/if}}
 </template>
+
 <template name="addEvents">
 	{{#if currentUser}}
 	<div class="col-md-7">
@@ -327,6 +312,21 @@
 		</div>
 		{{#each events}}
 		<div class="panel panel-default">
+	{{else}}
+	{{> plsLogin}}
+	{{/if}}
+</template>
+
+<template name="attendEvent">
+	{{#if currentUser}}
+	{{> currentEvent}}
+	<div class="panel-group margin" id="accordion" role="tablist" aria-multiselectable="true">
+		<div class="list-group" style="margin-bottom: 5px !important;">
+			<li class="list-group-item active">List of Events</li>
+		</div>
+		{{#each events}}
+		<div class="panel panel-default selectEvent">
+
 			<div class="panel-heading" role="tab">
 				<h4 class="panel-title">
 				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#{{this._id}}" aria-expanded="false" aria-controls="collapseTwo">
@@ -350,3 +350,5 @@
 	{{> plsLogin}}
 	{{/if}}
 </template>
+
+

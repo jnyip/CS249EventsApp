@@ -8,6 +8,9 @@ if (Meteor.isClient) { //This code only runs on the client
     Session.set('quickHelp', false);
     Session.set('schedule', false);
     Session.set('manageEvents', true);
+	Session.set('attendEvent', false);
+	Session.set('currentEvent', null);
+	
 	Template.body.helpers({
         homePage: function() {
             return Session.get('home');
@@ -20,6 +23,9 @@ if (Meteor.isClient) { //This code only runs on the client
         },
 		manageEventsPage: function() {
 			 return Session.get('manageEvents');
+		},
+		attendEventPage: function() {
+			return Session.get('attendEvent');
 		}
 
     })
@@ -31,26 +37,56 @@ if (Meteor.isClient) { //This code only runs on the client
 			Session.set('quickHelp', false);
 			Session.set('schedule', false);
 			Session.set('manageEvents', false);
+			Session.set('attendEvent', false);
        },
          "click #quickhelp": function() {
 			Session.set('home', false);
 			Session.set('quickHelp', true);
 			Session.set('schedule', false);
 			Session.set('manageEvents', false);
+			Session.set('attendEvent', false);
        },
         "click  #schedule": function() {
             Session.set('home', false);
 			Session.set('quickHelp', false);
 			Session.set('schedule', true);
 			Session.set('manageEvents', false);
+			Session.set('attendEvent', false);
         },
 		"click  #manageEvents": function() {
             Session.set('home', false);
 			Session.set('quickHelp', false);
 			Session.set('schedule', false);
 			Session.set('manageEvents', true);
+			Session.set('attendEvent', false);
+        },
+		"click  #attendEvent": function() {
+            Session.set('home', false);
+			Session.set('quickHelp', false);
+			Session.set('schedule', false);
+			Session.set('manageEvents', false);
+			Session.set('attendEvent', true);
         }
     });
+	
+	Template.currentEvent.helpers({
+		currentEvent: function() {
+			return Session.get("currentEvent");
+		},
+		isNull: function() {
+			return (Session.get("currentEvent")==null);
+		}
+	});
+	
+	Template.currentEvent.events({
+		"click #attendEvent": function() {
+            Session.set('home', false);
+			Session.set('quickHelp', false);
+			Session.set('schedule', false);
+			Session.set('manageEvents', false);
+			Session.set('attendEvent', true);
+		}
+	});
     
     Template.quickHelp.helpers({
 		threads: function () {
@@ -275,6 +311,24 @@ if (Meteor.isClient) { //This code only runs on the client
 		}
 	});            
             
+	
+	Template.attendEvent.helpers({
+		events: function() {
+			return Events.find().fetch();
+		},
+		createdByUser: function() {
+			return (this.createdBy == Meteor.userId());
+		}
+	});
+	
+	Template.attendEvent.events({
+		"click .remove": function() {
+			Events.remove(this._id);
+		},
+		"click .selectEvent": function() {
+			Session.set("currentEvent", this.name);
+		}
+	});
 
 	Accounts.ui.config({
 		requestPermissions: {},
