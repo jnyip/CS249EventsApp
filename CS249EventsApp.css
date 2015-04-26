@@ -38,6 +38,11 @@ ul {
 	padding-right: 40px !important;
 }
 
+.margin {
+	margin-left: 40px !important;
+	margin-right: 40px !important;
+}
+
 
 .blue {
     color: blue;
