@@ -4,57 +4,51 @@ Events = new Mongo.Collection("events");
 Calendar = new Mongo.Collection("calendar");
 
 if (Meteor.isClient) { //This code only runs on the client
+    Session.set('home',false);
+    Session.set('quickHelp', false);
+    Session.set('schedule', false);
+    Session.set('manageEvents', true);
 	Template.body.helpers({
         homePage: function() {
-            if (Pages.find().fetch().length != 0){
-                return Pages.findOne().home;
-            }
+            return Session.get('home');
         },
         quickHelpPage: function() {
-            if (Pages.find().fetch().length != 0){
-                return Pages.findOne().quickHelp;
-            }
+            return Session.get('quickHelp');
         },
         schedulePage: function() {
-            if (Pages.find().fetch().length != 0){
-                return Pages.findOne().schedule;
-            }
+            return Session.get('schedule');
         },
 		manageEventsPage: function() {
-			if (Pages.find().fetch().length != 0){
-                return Pages.findOne().manageEvents;
-            }
+			 return Session.get('manageEvents');
 		}
-    });
+
+    })
     
     Template.body.events({
+ 
        "click #home": function() {
-			var id = Pages.findOne()._id;
-			Pages.update(id, {$set: {home: true}});
-			Pages.update(id, {$set: {quickHelp: false}});
-			Pages.update(id, {$set: {schedule: false}});
-			Pages.update(id, {$set: {manageEvents: false}});
+			Session.set('home', true);
+			Session.set('quickHelp', false);
+			Session.set('schedule', false);
+			Session.set('manageEvents', false);
        },
          "click #quickhelp": function() {
-			var id = Pages.find().fetch()[0]._id;
-			Pages.update(id, {$set: {home: false}});
-			Pages.update(id, {$set: {quickHelp: true}});
-			Pages.update(id, {$set: {schedule: false}});
-			Pages.update(id, {$set: {manageEvents: false}});
+			Session.set('home', false);
+			Session.set('quickHelp', true);
+			Session.set('schedule', false);
+			Session.set('manageEvents', false);
        },
         "click  #schedule": function() {
-            var id = Pages.find().fetch()[0]._id;
-            Pages.update(id, {$set: {schedule: true}});
-            Pages.update(id, {$set: {quickHelp: false}});
-            Pages.update(id, {$set: {home: false}});
-			Pages.update(id, {$set: {manageEvents: false}});
+            Session.set('home', false);
+			Session.set('quickHelp', false);
+			Session.set('schedule', true);
+			Session.set('manageEvents', false);
         },
 		"click  #manageEvents": function() {
-            var id = Pages.find().fetch()[0]._id;
-            Pages.update(id, {$set: {schedule: false}});
-            Pages.update(id, {$set: {quickHelp: false}});
-            Pages.update(id, {$set: {home: false}});
-			Pages.update(id, {$set: {manageEvents: true}});
+            Session.set('home', false);
+			Session.set('quickHelp', false);
+			Session.set('schedule', false);
+			Session.set('manageEvents', true);
         }
     });
     
@@ -232,13 +226,13 @@ if (Meteor.isClient) { //This code only runs on the client
 }
 
 if (Meteor.isServer) {
-    if (Pages.find().fetch().length == 0) {
-        Pages.insert({
-            home: true, 
-            quickHelp: false,
-            schedule: false,
-			manageEvents: false
-        });
-    }
- 
+//    if (Pages.find().fetch().length == 0) {
+//        Pages.insert({
+//            home: true, 
+//            quickHelp: false,
+//            schedule: false,
+//			manageEvents: false
+//        });
+//    },
+        
 }
