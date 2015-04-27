@@ -7,7 +7,7 @@ if (Meteor.isClient) { //This code only runs on the client
     Session.set('home',false);
     Session.set('quickHelp', false);
     Session.set('schedule', false);
-    Session.set('manageEvents', true);
+    Session.set('addEvents', true);
 	Session.set('attendEvent', false);
 	Session.set('currentEvent', null);
 	
@@ -21,8 +21,8 @@ if (Meteor.isClient) { //This code only runs on the client
         schedulePage: function() {
             return Session.get('schedule');
         },
-		manageEventsPage: function() {
-			 return Session.get('manageEvents');
+		addEventsPage: function() {
+			 return Session.get('addEvents');
 		},
 		attendEventPage: function() {
 			return Session.get('attendEvent');
@@ -36,35 +36,35 @@ if (Meteor.isClient) { //This code only runs on the client
 			Session.set('home', true);
 			Session.set('quickHelp', false);
 			Session.set('schedule', false);
-			Session.set('manageEvents', false);
+			Session.set('addEvents', false);
 			Session.set('attendEvent', false);
        },
          "click #quickhelp": function() {
 			Session.set('home', false);
 			Session.set('quickHelp', true);
 			Session.set('schedule', false);
-			Session.set('manageEvents', false);
+			Session.set('addEvents', false);
 			Session.set('attendEvent', false);
        },
         "click  #schedule": function() {
             Session.set('home', false);
 			Session.set('quickHelp', false);
 			Session.set('schedule', true);
-			Session.set('manageEvents', false);
+			Session.set('addEvents', false);
 			Session.set('attendEvent', false);
         },
-		"click  #manageEvents": function() {
+		"click  #addEvents": function() {
             Session.set('home', false);
 			Session.set('quickHelp', false);
 			Session.set('schedule', false);
-			Session.set('manageEvents', true);
+			Session.set('addEvents', true);
 			Session.set('attendEvent', false);
         },
 		"click  #attendEvent": function() {
             Session.set('home', false);
 			Session.set('quickHelp', false);
 			Session.set('schedule', false);
-			Session.set('manageEvents', false);
+			Session.set('addEvents', false);
 			Session.set('attendEvent', true);
         }
     });
@@ -83,7 +83,7 @@ if (Meteor.isClient) { //This code only runs on the client
             Session.set('home', false);
 			Session.set('quickHelp', false);
 			Session.set('schedule', false);
-			Session.set('manageEvents', false);
+			Session.set('addEvents', false);
 			Session.set('attendEvent', true);
 		}
 	});
@@ -241,38 +241,6 @@ if (Meteor.isClient) { //This code only runs on the client
 		}
     });
 	
-	Template.manageEvents.helpers({
-		events: function() {
-			return Events.find().fetch();
-		},
-		createdByUser: function() {
-			return (this.createdBy == Meteor.userId());
-		}
-	});
-	
-	Template.manageEvents.events({
-		"submit .eventsForm": function() {
-			event.preventDefault();
-			var eName = event.target.eName.value;
-			var eDescript = event.target.eDescript.value;
-			var startT = event.target.startTime.value;
-			var endT = event.target.endTime.value;
-			var userId = Meteor.userId();
-			var userName = Meteor.user().profile.firstName + " " + Meteor.user().profile.lastName;
-			
-			Events.insert({
-				name: eName,
-				description: eDescript,
-				startTime: startT,
-				endTime: endT,
-				createdBy: userId,
-				coordinator: userName
-			});
-		},
-		"click .remove": function() {
-			Events.remove(this._id);
-		}
-	});     
     Template.addEvents.helpers({
 		events: function() {
 			return Events.find().fetch();
