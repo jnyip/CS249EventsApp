@@ -172,16 +172,7 @@ if (Meteor.isClient) { //This code only runs on the client
 	});
 	
 	Template.schedule.events({
-        // "click .add": function(){
-            // //$(".scheduleForm").css("display","initial");
-            // $("#datepicker").datepicker({
-                // orientation: "top auto"
-            // });
-        // },
-        //"submit #fillSchedule": function(e){
 		"click .add": function() {
-			//e.preventDefault();
-             //$(".scheduleForm").css("display","none");
             var eventName = document.getElementById("inputEvent").value;
             var location = document.getElementById("inputLocation").value;
             var time = document.getElementById("datepicker").value;
@@ -319,12 +310,6 @@ if (Meteor.isClient) { //This code only runs on the client
 			fieldLabel: 'Last name',
 			inputType: 'text',
 			visible: true,
-//		}, {
-//			fieldName: 'coordinator',
-//			fieldLabel: 'I am a coordinator',
-//			inputType: 'checkbox',
-//			visible: true,
-//			saveToProfile: false
 		} ]
 	});
         

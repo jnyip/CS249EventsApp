@@ -9,7 +9,6 @@
 		</div>
 		<div class="navbar-collapse collapse">
 			{{#if currentUser}}
-           <!--  <a class="navbar-brand" id="home">Home</a> -->
             <a class="navbar-brand" id="addEvents">Add an Event</a>
 			<a class="navbar-brand" id="attendEvent">Attend an Event</a>
             <a class="navbar-brand" id="quickhelp">Quick Help</a>
@@ -87,8 +86,8 @@
         <div class="list-group">
             <li class="list-group-item {{#if active}}active{{else}}oldQuestion{{/if}} {{#if newQ}}newQuestion{{/if}}">
                 {{text}}  
-                <button type="button" class="close done green">✓</button>
-                <button type="button" class="close delete red">×</button>
+                <button type="button" class="close done">✓</button>
+                <button type="button" class="close delete">×</button>
             </li>
             {{#each responses}}
                 <li class="list-group-item">{{this}}</li>
@@ -117,23 +116,35 @@
         </thead>
         <tbody>
 			<tr class="info">
-			<!-- <form id="fillSchedule" class="form-horizontal"> -->
-				<td><input type="text" class="form-control" id="datepicker" name="inputTime"></td>
-				<td><input type="text" class="form-control" id="inputEvent" name="inputEvent" placeholder="Event"></td>
-				<td>
-					<div class="col-md-11"><input type="text" class="form-control" id="inputLocation" name="inputLocation" placeholder="Location"></div>
-					<div class="col-md-1"><button type="button" class="add close blue">+</button></div>
+				<td style="width: 20%;">
+					<div class='input-group date' id='datepicker'>
+					<input type='text' class="form-control" name="datepicker"/>
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+					</div>
+					<script type="text/javascript">
+						$(function () {
+							$('#datepicker').datetimepicker();
+						});
+					</script>
+				</td>
+				<td style="width: 40%;">
+					<input type="text" class="form-control" id="inputEvent" name="inputEvent" placeholder="Event">
+				</td>
+				<td style="width: 35%;">
+					<input type="text" class="form-control" id="inputLocation" name="inputLocation" placeholder="Location">
+				</td>
+				<td style="width: 5%;">
+					<button type="button" class="add close blue">+</button>
 				</td>
 			</tr>
-			<script>$("#datepicker").datepicker({orientation: "top auto"});</script>
 			{{#each calendar}}
 			<tr>
 				<td>{{timeDateString}}</td>
 				<td>{{this.event}}</td>
-				<td>
-					<div class="col-md-11">{{this.location}}</div>
-					<div class="col-md-1"><button type="button" class="close remove">×</button></div>
-				</td>
+				<td>{{this.location}}</td>
+				<td><button type="button" class="close remove">×</button></td>
 			</tr>
 			{{/each}}
         </tbody>
@@ -271,5 +282,3 @@
 	{{> plsLogin}}
 	{{/if}}
 </template>
-
-
