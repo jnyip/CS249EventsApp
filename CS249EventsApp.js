@@ -167,7 +167,7 @@ if (Meteor.isClient) { //This code only runs on the client
 			return Calendar.find().fetch();
 		},
 		timeDateString: function() {
-			return this.time.toLocaleDateString();
+			return this.time; //.toLocaleDateString();
 		}
 	});
 	
@@ -175,58 +175,15 @@ if (Meteor.isClient) { //This code only runs on the client
 		"click .add": function() {
             var eventName = document.getElementById("inputEvent").value;
             var location = document.getElementById("inputLocation").value;
-            var time = document.getElementById("datepicker").value;
+            var time = document.getElementById("dateinput").value;
             var userId = Meteor.userId();
             Calendar.insert({
 				event: eventName,
 				location: location,
-				time: new Date(time),
+				time: time,
 				createdBy: userId 
 			});          
         },
-		//"submit #inputEvent": function() {
-		"keypress #inputEvent": function (event) {
-			if (event.which == 13) {
-				var eventName = document.getElementById("inputEvent").value;
-				var location = document.getElementById("inputLocation").value;
-				var time = document.getElementById("datepicker").value;
-				var userId = Meteor.userId();
-				Calendar.insert({
-					event: eventName,
-					location: location,
-					time: new Date(time),
-					createdBy: userId 
-				});  
-			}
-		},
-		"keypress #inputLocation": function (event) {
-			if (event.which == 13) {
-				var eventName = document.getElementById("inputEvent").value;
-				var location = document.getElementById("inputLocation").value;
-				var time = document.getElementById("datepicker").value;
-				var userId = Meteor.userId();
-				Calendar.insert({
-					event: eventName,
-					location: location,
-					time: new Date(time),
-					createdBy: userId 
-				});  
-			} 
-		},
-		"keypress #datepicker": function (event) {
-			if (event.which == 13) {
-				var eventName = document.getElementById("inputEvent").value;
-				var location = document.getElementById("inputLocation").value;
-				var time = document.getElementById("datepicker").value;
-				var userId = Meteor.userId();
-				Calendar.insert({
-					event: eventName,
-					location: location,
-					time: new Date(time),
-					createdBy: userId 
-				});  
-			} 
-		},
 		"click .remove": function() {
 			Calendar.remove(this._id);
 		}
