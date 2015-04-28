@@ -71,7 +71,8 @@ if (Meteor.isClient) { //This code only runs on the client
 	
 	Template.currentEvent.helpers({
 		currentEvent: function() {
-			return Session.get("currentEvent");
+			var id = Session.get("currentEvent");
+            return Events.findOne({"_id": id}).name;
 		},
 		isNull: function() {
 			return (Session.get("currentEvent")==null);
@@ -90,15 +91,15 @@ if (Meteor.isClient) { //This code only runs on the client
     
     Template.quickHelp.helpers({
 		threads: function () {
-			return Threads.find({}, {sort: {createdAt: -1}});
+			return Threads.find({current:Session.get("currentEvent")}, {sort: {createdAt: -1}});
 		}
 	});
 	
     
 	Template.quickHelp.events({
-		"submit .new-thread": function(event){
-			event.preventDefault(); //prevents default form submit
-			var text = event.target.thread.value;
+		"submit .new-thread": function(e){
+			e.preventDefault(); //prevents default form submit
+			var text = e.target.thread.value;
             var currentUserId = Meteor.userId();
             var currentUserName = Meteor.user().profile.firstName + " " + Meteor.user().profile.lastName;
             var completeText = currentUserName + ": " + text;
@@ -108,9 +109,10 @@ if (Meteor.isClient) { //This code only runs on the client
                 initialCreatedBy: currentUserId,
 				responses: [],
 				active: true,
+                current: Session.get("currentEvent")
 //                user: this.userID;
 			});
-			event.target.thread.value = ""; //clear form
+			e.target.thread.value = ""; //clear form
 			//return false; //prevents default form submit, but won't work if error above
 		}
 	});
@@ -138,9 +140,9 @@ if (Meteor.isClient) { //This code only runs on the client
 		"click .delete": function () {
 			Threads.remove(this._id);
 		},
-		"submit .new-response": function(event){
-			event.preventDefault();
-			var text = event.target.response.value;
+		"submit .new-response": function(e){
+			e.preventDefault();
+			var text = et.target.response.value;
             var userStatus = "";
             if (Meteor.user().profile.coordinator){
                 userStatus = "Coordinator";
@@ -155,7 +157,7 @@ if (Meteor.isClient) { //This code only runs on the client
                 $push: {createdby: currentUser, 
                         responses: completeText}
             });
-			event.target.response.value = "";
+			e.target.response.value = "";
 		},
 		"click .done": function() {
 			Threads.update(this._id, {$set: {active: !this.active}});
@@ -164,7 +166,7 @@ if (Meteor.isClient) { //This code only runs on the client
 	
 	Template.schedule.helpers({
 		calendar: function() {
-			return Calendar.find().fetch();
+			return Calendar.find({current:Session.get("currentEvent")}).fetch();
 		},
 		timeDateString: function() {
 			return this.time.toLocaleDateString();
@@ -178,55 +180,13 @@ if (Meteor.isClient) { //This code only runs on the client
             var time = document.getElementById("datepicker").value;
             var userId = Meteor.userId();
             Calendar.insert({
-				event: eventName,
+				task: eventName,
 				location: location,
 				time: new Date(time),
-				createdBy: userId 
+				createdBy: userId,
+                current: Session.get("currentEvent")
 			});          
         },
-		//"submit #inputEvent": function() {
-		"keypress #inputEvent": function (event) {
-			if (event.which == 13) {
-				var eventName = document.getElementById("inputEvent").value;
-				var location = document.getElementById("inputLocation").value;
-				var time = document.getElementById("datepicker").value;
-				var userId = Meteor.userId();
-				Calendar.insert({
-					event: eventName,
-					location: location,
-					time: new Date(time),
-					createdBy: userId 
-				});  
-			}
-		},
-		"keypress #inputLocation": function (event) {
-			if (event.which == 13) {
-				var eventName = document.getElementById("inputEvent").value;
-				var location = document.getElementById("inputLocation").value;
-				var time = document.getElementById("datepicker").value;
-				var userId = Meteor.userId();
-				Calendar.insert({
-					event: eventName,
-					location: location,
-					time: new Date(time),
-					createdBy: userId 
-				});  
-			} 
-		},
-		"keypress #datepicker": function (event) {
-			if (event.which == 13) {
-				var eventName = document.getElementById("inputEvent").value;
-				var location = document.getElementById("inputLocation").value;
-				var time = document.getElementById("datepicker").value;
-				var userId = Meteor.userId();
-				Calendar.insert({
-					event: eventName,
-					location: location,
-					time: new Date(time),
-					createdBy: userId 
-				});  
-			} 
-		},
 		"click .remove": function() {
 			Calendar.remove(this._id);
 		}
@@ -285,7 +245,7 @@ if (Meteor.isClient) { //This code only runs on the client
 			Events.remove(this._id);
 		},
 		"click .selectEvent": function() {
-			Session.set("currentEvent", this.name);
+			Session.set("currentEvent", this._id);
 		}
 	});
 
