@@ -169,7 +169,7 @@ if (Meteor.isClient) { //This code only runs on the client
 			return Calendar.find({current:Session.get("currentEvent")}).fetch();
 		},
 		timeDateString: function() {
-			return this.time.toLocaleDateString();
+			return this.time; //.toLocaleDateString();
 		}
 	});
 	
@@ -177,12 +177,12 @@ if (Meteor.isClient) { //This code only runs on the client
 		"click .add": function() {
             var eventName = document.getElementById("inputEvent").value;
             var location = document.getElementById("inputLocation").value;
-            var time = document.getElementById("datepicker").value;
+            var time = document.getElementById("dateinput").value;
             var userId = Meteor.userId();
             Calendar.insert({
 				task: eventName,
 				location: location,
-				time: new Date(time),
+				time: time,
 				createdBy: userId,
                 current: Session.get("currentEvent")
 			});          
