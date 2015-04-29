@@ -5,67 +5,58 @@
 <body>
     <div class="navbar navbar-default" role="navigation">
 		<div class="navbar-header">
-			<a class="navbar-brand" id="home">Events Organizer</a>
+			<a class="navbar-brand pointer" id="home">Events Organizer</a>
 		</div>
 		<div class="navbar-collapse collapse">
 			{{#if currentUser}}
-            <a class="navbar-brand" id="addEvents">Add an Event</a>
-			<a class="navbar-brand" id="attendEvent">Attend an Event</a>
-            <a class="navbar-brand" id="quickhelp">Quick Help</a>
-            <a class="navbar-brand" id="schedule">Schedule</a>
+            <a class="navbar-brand pointer" id="addEvents">Add an Event</a>
+			<a class="navbar-brand pointer" id="attendEvent">Attend an Event</a>
+            <a class="navbar-brand pointer" id="quickHelp">Quick Help</a>
+            <a class="navbar-brand pointer" id="schedule">Schedule</a>
             {{/if}}
-			<ul class="nav navbar-nav navbar-right">
-				{{> loginButtons}} <!-- here -->
-			</ul>
+			<ul class="nav navbar-nav navbar-right">{{> loginButtons}}</ul>
 		</div>
 	</div>
     
-    {{#if homePage}}
-    {{> home}}
-    {{/if}}
-    
-    {{#if quickHelpPage}}
-    {{> quickHelp}}
-    {{/if}}
-    
-    {{#if schedulePage}}
-    {{> schedule}}
-    {{/if}}
-	
-	{{#if addEventsPage}}
-	{{> addEvents}}
-	{{/if}}
-	
-	{{#if attendEventPage}}
-	{{> attendEvent}}
-	{{/if}}
+	<div class="container-fluid">
+		{{#if homePage}}{{> home}}{{/if}}
+		{{#if quickHelpPage}}{{> quickHelp}}{{/if}}
+		{{#if schedulePage}}{{> schedule}}{{/if}}
+		{{#if addEventsPage}}{{> addEvents}}{{/if}}
+		{{#if attendEventPage}}{{> attendEvent}}{{/if}}
+	</div>
 </body>
 
 <template name="plsLogin">
-	<div>You need to log in</div>
+	<div class="jumbotron alert-danger alert">
+		<h1 class="text-center">Please log in</h1>
+	</div>
 </template>
 
 <template name="home">
-	<div> HOME PAGE</div>
+	<div class="jumbotron">
+		<h1>Event Organizer!</h1>
+		<p>Blah blah blah, this will eventually look like a home page someday.</p>
+		<p><a class="btn btn-primary btn-lg" href="#" role="button">Unnecessary button?</a></p>
+	</div>
 </template>
 
 <template name="currentEvent">
-	{{#if isNull}}
-	<div class="alert alert-danger margin">
+	{{#if noCurrentEvent}}
+	<div class="alert alert-danger">
 		<h4>Please <a class="alert-link" id="attendEvent">select an event to attend</a></h4>
 	</div>	
 	{{else}}
-	<div class="alert alert-success margin">
+	<div class="alert alert-success">
 		<h4>Event: {{currentEvent}}</h4>
 	</div>
 	{{/if}}
 </template>
 
 <template name="quickHelp">
-    {{#if currentUser}}
 	{{> currentEvent}}
     <section>
-		<div class="padding">
+		<div>
 			<form class="new-thread form-horizontal" style="padding-bottom: 40px !important;">
 					<input class="form-control input-lg" type="text" name="thread" placeholder="Ask a question" />
 			</form>
@@ -76,35 +67,27 @@
             </ul>
 		</div>
     </section>
-	{{else}}
-	{{> plsLogin}}	
-	{{/if}}
 </template>
     
 <template name="oneThread">
-    {{#if currentUser}}
-        <div class="list-group">
-            <li class="list-group-item {{#if active}}active{{else}}oldQuestion{{/if}} {{#if newQ}}newQuestion{{/if}}">
-                {{text}}  
-                <button type="button" class="close done">✓</button>
-                <button type="button" class="close delete">×</button>
-            </li>
-            {{#each responses}}
-                <li class="list-group-item">{{this}}</li>
-            {{/each}}
-            <li class="list-group-item">
-                <form class="new-response form-horizontal">
-                    <input class="form-control" type="text" name="response" placeholder="Type to reply" />
-                </form>
-            </li>
-        </div>
-	{{else}}
-	{{> plsLogin}}
-    {{/if}}
+	<div class="list-group">
+		<li class="list-group-item {{#if this.active}}active{{else}}oldQuestion{{/if}} {{#if newQ}}newQuestion{{/if}}">
+			{{text}}  
+			<button type="button" class="close done">✓</button>
+			<button type="button" class="close delete">×</button>
+		</li>
+		{{#each this.responses}}
+			<li class="list-group-item">{{this}}</li>
+		{{/each}}
+		<li class="list-group-item">
+			<form class="new-response form-horizontal">
+				<input class="form-control" type="text" name="response" placeholder="Type to reply" />
+			</form>
+		</li>
+	</div>
 </template>
 
 <template name="schedule">
-	{{#if currentUser}}
 	{{> currentEvent}}
     <table class="table table-striped table-hover col-md-12">
         <thead>
@@ -149,13 +132,9 @@
 			{{/each}}
         </tbody>
     </table>
-	{{else}}
-	{{> plsLogin}}
-	{{/if}}
 </template>
 
 <template name="addEvents">
-	{{#if currentUser}}
 	<div class="col-md-5">
 		<form class="form-horizontal well eventsForm">
 		<fieldset>
@@ -224,16 +203,10 @@
 		<div class="list-group">
 			<li class="list-group-item active">Your Events</li>
 		</div>
-		{{#each events}}
-		{{#if createdByUser}}
+		{{#each usersEvents}}
 		<div class="panel panel-default">
-			<div class="panel-heading" role="tab">
-				<h4 class="panel-title">
-				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#{{this._id}}" aria-expanded="false" aria-controls="collapseTwo">
-					{{this.name}}
-					<button type="button" class="close remove">×</button>
-				</a>
-				</h4>
+			<div class="panel-heading pointer" data-toggle="collapse" data-parent="#accordion" href="#{{this._id}}">
+				<h4 class="panel-title">{{this.name}}<button type="button" class="close remove">×</button></h4>
 			</div>
 			<div id="{{this._id}}" class="panel-collapse collapse" role="tabpanel">
 				<div class="panel-body">
@@ -245,30 +218,20 @@
 				</div>
 			</div>
 		</div>
-		{{/if}}
 		{{/each}}
 	</div>
-	{{else}}
-	{{> plsLogin}}
-	{{/if}}
 </template>
 
 <template name="attendEvent">
-	{{#if currentUser}}
 	{{> currentEvent}}
-	<div class="panel-group margin" id="accordion" role="tablist" aria-multiselectable="true">
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 		<div class="list-group" style="margin-bottom: 5px !important;">
 			<li class="list-group-item active">List of Events</li>
 		</div>
 		{{#each events}}
-		<div class="panel panel-default selectEvent">
-
-			<div class="panel-heading" role="tab">
-				<h4 class="panel-title">
-				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#{{this._id}}" aria-expanded="false" aria-controls="collapseTwo">
-					{{this.name}}
-				</a>
-				</h4>
+		<div class="panel panel-default">
+			<div class="panel-heading selectEvent pointer" data-toggle="collapse" data-parent="#accordion" href="#{{this._id}}">
+				<h4 class="panel-title">{{this.name}}</h4>
 			</div>
 			<div id="{{this._id}}" class="panel-collapse collapse" role="tabpanel">
 				<div class="panel-body">
@@ -278,8 +241,4 @@
 		</div>
 		{{/each}}
 	</div>
-	
-	{{else}}
-	{{> plsLogin}}
-	{{/if}}
 </template>

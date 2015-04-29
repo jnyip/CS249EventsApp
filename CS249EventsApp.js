@@ -1,101 +1,58 @@
+//our MongoDB collections
 Threads = new Mongo.Collection("threads");
-Pages = new Mongo.Collection("pages");
 Events = new Mongo.Collection("events");
 Calendar = new Mongo.Collection("calendar");
 
-if (Meteor.isClient) { //This code only runs on the client
-    Session.set('home',false);
-    Session.set('quickHelp', false);
-    Session.set('schedule', false);
-    Session.set('addEvents', true);
-	Session.set('attendEvent', false);
+if (Meteor.isClient) {
+	Session.set('currentPage', 'addEvents');
 	Session.set('currentEvent', null);
 	
+	/*******************************************************************************
+	 * TEMPLATE BODY: only takes care of the navbar
+	 *******************************************************************************/
 	Template.body.helpers({
-        homePage: function() {
-            return Session.get('home');
-        },
-        quickHelpPage: function() {
-            return Session.get('quickHelp');
-        },
-        schedulePage: function() {
-            return Session.get('schedule');
-        },
-		addEventsPage: function() {
-			 return Session.get('addEvents');
-		},
-		attendEventPage: function() {
-			return Session.get('attendEvent');
-		}
-
-    })
+        homePage: function() {return Session.get('currentPage')=='home';},
+        quickHelpPage: function() {return Session.get('currentPage')=='quickHelp';},
+        schedulePage: function() {return Session.get('currentPage')=='schedule';},
+		addEventsPage: function() {return Session.get('currentPage')=='addEvents';},
+		attendEventPage: function() {return Session.get('currentPage')=='attendEvent';}
+    });
     
     Template.body.events({
- 
-       "click #home": function() {
-			Session.set('home', true);
-			Session.set('quickHelp', false);
-			Session.set('schedule', false);
-			Session.set('addEvents', false);
-			Session.set('attendEvent', false);
-       },
-         "click #quickhelp": function() {
-			Session.set('home', false);
-			Session.set('quickHelp', true);
-			Session.set('schedule', false);
-			Session.set('addEvents', false);
-			Session.set('attendEvent', false);
-       },
-        "click  #schedule": function() {
-            Session.set('home', false);
-			Session.set('quickHelp', false);
-			Session.set('schedule', true);
-			Session.set('addEvents', false);
-			Session.set('attendEvent', false);
-        },
-		"click  #addEvents": function() {
-            Session.set('home', false);
-			Session.set('quickHelp', false);
-			Session.set('schedule', false);
-			Session.set('addEvents', true);
-			Session.set('attendEvent', false);
-        },
-		"click  #attendEvent": function() {
-            Session.set('home', false);
-			Session.set('quickHelp', false);
-			Session.set('schedule', false);
-			Session.set('addEvents', false);
-			Session.set('attendEvent', true);
-        }
+		"click #home": function() {Session.set('currentPage', 'home');},
+		"click #quickHelp": function() {Session.set('currentPage', 'quickHelp');},
+		"click  #schedule": function() {Session.set('currentPage', 'schedule');},
+		"click  #addEvents": function() {Session.set('currentPage', 'addEvents');},
+		"click  #attendEvent": function() {Session.set('currentPage', 'attendEvent');}
     });
 	
+	/*******************************************************************************
+	 * TEMPLATE CURRENTEVENT: displays selected events OR prompts user to select one
+	 *******************************************************************************/
 	Template.currentEvent.helpers({
 		currentEvent: function() {
-			var id = Session.get("currentEvent");
-            return Events.findOne({"_id": id}).name;
+            return Events.findOne({"_id": Session.get("currentEvent")}).name;
 		},
-		isNull: function() {
+		noCurrentEvent: function() {
 			return (Session.get("currentEvent")==null);
 		}
 	});
 	
 	Template.currentEvent.events({
 		"click #attendEvent": function() {
-            Session.set('home', false);
-			Session.set('quickHelp', false);
-			Session.set('schedule', false);
-			Session.set('addEvents', false);
-			Session.set('attendEvent', true);
+			Session.set("currentPage", 'attendEvent');
 		}
 	});
     
+	/*******************************************************************************
+	 * TEMPLATE QUICKHELP: displays the quick help board (multiple threads)
+	 *******************************************************************************/
     Template.quickHelp.helpers({
 		threads: function () {
-			return Threads.find({current:Session.get("currentEvent")}, {sort: {createdAt: -1}});
+			return Threads.find({current:Session.get("currentEvent")}, {sort: {createdAt: -1}}).fetch();
 		}
 	});
 	
-    
 	Template.quickHelp.events({
 		"submit .new-thread": function(e){
 			e.preventDefault(); //prevents default form submit
@@ -106,43 +63,31 @@ if (Meteor.isClient) { //This code only runs on the client
 			Threads.insert({
 				text: completeText,
 				createdAt: new Date(), // current time
-                initialCreatedBy: currentUserId,
+                createdBy: currentUserId,
 				responses: [],
 				active: true,
                 current: Session.get("currentEvent")
-//                user: this.userID;
 			});
 			e.target.thread.value = ""; //clear form
-			//return false; //prevents default form submit, but won't work if error above
 		}
 	});
 	
+	/*******************************************************************************
+	 * TEMPLATE ONETHREAD: displays a single thread with responses (allows user to respond)
+	 *******************************************************************************/
 	Template.oneThread.helpers({
-		responses: function() {
-			var thisThread = Threads.find(this._id).fetch();
-			return thisThread[0].responses;
-		},
-		active: function() {
-			var thisThread = Threads.find(this._id).fetch();
-			return thisThread[0].active;
-		},
 		newQ: function() {
-			var thisThread = Threads.find(this._id).fetch();
-			return (thisThread[0].responses.length==0);
+			return this.responses.length==0;
 		}
 	});
 
 	Template.oneThread.events({
-		// "click .toggle-checked": function () {
-			// // Set the checked property to the opposite of its current value
-			// Threads.update(this._id, {$set: {checked: ! this.checked}});
-		// },
 		"click .delete": function () {
 			Threads.remove(this._id);
 		},
 		"submit .new-response": function(e){
 			e.preventDefault();
-			var text = et.target.response.value;
+			var text = e.target.response.value;
             var userStatus = "";
             if (Meteor.user().profile.coordinator){
                 userStatus = "Coordinator";
@@ -164,6 +109,9 @@ if (Meteor.isClient) { //This code only runs on the client
 		}
 	});
 	
+	/*******************************************************************************
+	 * TEMPLATE SCHEDULE: allows user to view (or add) to schedule for the selected event
+	 *******************************************************************************/
 	Template.schedule.helpers({
 		calendar: function() {
 			return Calendar.find({current:Session.get("currentEvent")}).fetch();
@@ -192,14 +140,15 @@ if (Meteor.isClient) { //This code only runs on the client
 		}
     });
 	
+	/*******************************************************************************
+	 * TEMPLATE ADDEVENTS: users can add, manage, and share access to events
+	 *******************************************************************************/
     Template.addEvents.helpers({
-		events: function() {
-			return Events.find().fetch();
-		},
-		createdByUser: function() {
-			return (this.createdBy == Meteor.userId());
+		usersEvents: function() {
+			return Events.find({'createdBy': Meteor.userId()}).fetch();
 		}
 	});
+	
     Template.addEvents.events({
 		"submit .eventsForm": function(event) {
 			event.preventDefault();
@@ -230,13 +179,12 @@ if (Meteor.isClient) { //This code only runs on the client
 		}
 	});            
             
-	
+	/*******************************************************************************
+	 * TEMPLATE ATTENDEVENT: allows user to select an event to "attend"
+	 *******************************************************************************/
 	Template.attendEvent.helpers({
 		events: function() {
 			return Events.find().fetch();
-		},
-		createdByUser: function() {
-			return (this.createdBy == Meteor.userId());
 		}
 	});
 	
@@ -249,6 +197,9 @@ if (Meteor.isClient) { //This code only runs on the client
 		}
 	});
 
+	/*******************************************************************************
+	 * ACCOUNTS: manages accounts and passwords and stuff
+	 *******************************************************************************/
 	Accounts.ui.config({
 		requestPermissions: {},
 		extraSignupFields: [{
@@ -271,8 +222,7 @@ if (Meteor.isClient) { //This code only runs on the client
 			inputType: 'text',
 			visible: true,
 		} ]
-	});
-        
+	});    
 }
 
 if (Meteor.isServer) {

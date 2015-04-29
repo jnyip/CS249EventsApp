@@ -25,16 +25,9 @@ ul {
     padding-left: 0px !important;
 }
 
-.padding {
-	padding-left: 40px !important;
-	padding-right: 40px !important;
+.pointer {
+	cursor: pointer;
 }
-
-.margin {
-	margin-left: 40px !important;
-	margin-right: 40px !important;
-}
-
 
 .blue {
     color: blue;
