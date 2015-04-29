@@ -20,6 +20,10 @@
     color: #E0E0E0;
 }
 
+.activePage {
+	background-color: #dfdfdf !important;
+}
+
 ul {
     list-style-type: none;
     padding-left: 0px !important;

@@ -27,18 +27,15 @@ if (Meteor.isClient) {
     });
 	
 	/*******************************************************************************
-	 * TEMPLATE CURRENTEVENT: displays selected events OR prompts user to select one
+	 * TEMPLATES CURRENTEVENT & NOCURRENTEVENT: displays event or prompts user to select one
 	 *******************************************************************************/
 	Template.currentEvent.helpers({
 		currentEvent: function() {
             return Events.findOne({"_id": Session.get("currentEvent")}).name;
-		},
-		noCurrentEvent: function() {
-			return (Session.get("currentEvent")==null);
 		}
 	});
 	
-	Template.currentEvent.events({
+	Template.noCurrentEvent.events({
 		"click #attendEvent": function() {
 			Session.set("currentPage", 'attendEvent');
 		}
@@ -50,6 +47,9 @@ if (Meteor.isClient) {
     Template.quickHelp.helpers({
 		threads: function () {
 			return Threads.find({current:Session.get("currentEvent")}, {sort: {createdAt: -1}}).fetch();
+		},
+		noEvent: function() {
+			return (Session.get("currentEvent")==null);
 		}
 	});
 	
@@ -118,6 +118,13 @@ if (Meteor.isClient) {
 		},
 		timeDateString: function() {
 			return this.time; //.toLocaleDateString();
+		},
+		noEvent: function() {
+			return (Session.get("currentEvent")==null);
+		},
+		userHasAccess: function() {
+			var event = Events.findOne({"_id": Session.get("currentEvent")});
+			return Meteor.userId()==event.createdBy;
 		}
 	});
 	
@@ -185,6 +192,9 @@ if (Meteor.isClient) {
 	Template.attendEvent.helpers({
 		events: function() {
 			return Events.find().fetch();
+		},
+		noEvent: function() {
+			return (Session.get("currentEvent")==null);
 		}
 	});
 	
