@@ -68,8 +68,13 @@
 			<form class="new-thread form-horizontal" style="padding-bottom: 40px !important;">
 					<input class="form-control input-lg" type="text" name="thread" placeholder="Ask a question" />
 			</form>
-			<ul>
-			  {{#each threads}}
+            <ul class='col-md-6'>
+			  {{#each resolvedThreads}}
+				{{> oneThread}}
+			  {{/each}}
+			</ul>
+			<ul class='col-md-6'>
+			  {{#each unresolvedThreads}}
 				{{> oneThread}}
 			  {{/each}}
 			</ul>
@@ -132,7 +137,7 @@
 					<input type="text" class="form-control" id="inputLocation" name="inputLocation" placeholder="Location">
 				</td>
 				<td style="width: 5%;">
-					<button type="button" class="add close blue">+</button>
+					<button type="button" class="add btn btn-default blue">+</button>
 				</td>
 			</tr>
 			{{/if}}
@@ -141,7 +146,7 @@
 				<td>{{timeDateString}}</td>
 				<td>{{this.task}}</td>
 				<td>{{this.location}}</td>
-				<td>{{#if userHasAccess}}<button type="button" class="close remove">×</button>{{/if}}</td>
+				<td>{{#if userHasAccess}}<button type="button" class="btn btn-default btn-sm remove">×</button>{{/if}}</td>
 			</tr>
 			{{/each}}
         </tbody>
@@ -150,7 +155,7 @@
 </template>
 
 <template name="addEvents">
-	<div class="col-md-5">
+	<div class="col-md-6">
 		<form class="form-horizontal well eventsForm">
 		<fieldset>
 			<legend>Add an Event</legend>
@@ -213,7 +218,7 @@
 		</form>
 	</div>
 				
-    <div class="panel-group col-md-7" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel-group col-md-6" id="accordion" role="tablist" aria-multiselectable="true">
 		<div class="list-group">
 			<li class="list-group-item active">Your Events</li>
 		</div>

@@ -1,4 +1,20 @@
 /* CSS declarations go here */
+button.close {
+    color: white !important;
+    font-weight: normal !important;
+    opacity: 0.9 !important;
+    text-shadow: none !important;
+    margin-left: 5px;
+}
+button.done:hover {
+    color: green !important;
+    opacity: 0.5 !important;
+}
+button.delete:hover {
+    color: red !important;
+    opacity: 0.5 !important;
+}
+    
 #coordinator, #participant {
     background-color: #3399FF;
     text-align: center;
@@ -45,6 +61,11 @@ ul {
 .oldQuestion {
 	background-color: #bbb !important;
 	border-color: #bbb !important;
+}
+
+.oldQuestion > .done {
+    color: green !important;
+    opacity: 0.9 !important;
 }
 
 #startTime, #endTime {

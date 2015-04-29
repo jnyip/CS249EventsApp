@@ -45,8 +45,11 @@ if (Meteor.isClient) {
 	 * TEMPLATE QUICKHELP: displays the quick help board (multiple threads)
 	 *******************************************************************************/
     Template.quickHelp.helpers({
-		threads: function () {
-			return Threads.find({current:Session.get("currentEvent")}, {sort: {createdAt: -1}}).fetch();
+		unresolvedThreads: function () {
+			return Threads.find({current:Session.get("currentEvent"),active:false}, {sort: {createdAt: -1}}).fetch();
+		},
+        resolvedThreads: function () {
+			return Threads.find({current:Session.get("currentEvent"),active:true}, {sort: {createdAt: -1}}).fetch();
 		},
 		noEvent: function() {
 			return (Session.get("currentEvent")==null);
@@ -142,6 +145,21 @@ if (Meteor.isClient) {
                 current: Session.get("currentEvent")
 			});          
         },
+        "keypress #inputLocation": function (event) {
+			if (event.which == 13) {
+				var eventName = document.getElementById("inputEvent").value;
+				var location = document.getElementById("inputLocation").value;
+				var time = document.getElementById("datepicker").value;
+				var userId = Meteor.userId();
+				Calendar.insert({
+                    task: eventName,
+                    location: location,
+                    time: time,
+                    createdBy: userId,
+                    current: Session.get("currentEvent")
+				});  
+			} 
+		},
 		"click .remove": function() {
 			Calendar.remove(this._id);
 		}
