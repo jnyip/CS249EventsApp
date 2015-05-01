@@ -46,13 +46,47 @@ if (Meteor.isClient) {
 	 *******************************************************************************/
     Template.quickHelp.helpers({
 		unresolvedThreads: function () {
-			return Threads.find({current:Session.get("currentEvent"),active:false}, {sort: {createdAt: -1}}).fetch();
+			return Threads.find({current:Session.get("currentEvent"),old:false}, {sort: {createdAt: -1}}).fetch();
 		},
         resolvedThreads: function () {
-			return Threads.find({current:Session.get("currentEvent"),active:true}, {sort: {createdAt: -1}}).fetch();
+			return Threads.find({current:Session.get("currentEvent"),old:true}, {sort: {createdAt: -1}}).fetch();
 		},
 		noEvent: function() {
 			return (Session.get("currentEvent")==null);
+		},
+		newPct: function() {
+			var numNew = 0;
+			var totalThreads = Threads.find({current:Session.get("currentEvent")}).fetch().length;
+			var unresolved = Threads.find({current:Session.get("currentEvent"),old:false}).fetch();
+			for (var i = 0; i < unresolved.length; i++) {
+				if (unresolved[i].responses.length==0) {
+					numNew++;
+				}
+			}
+			var newPercent = numNew/totalThreads*100;
+			console.log(newPercent+"%");
+			return newPercent + "%";	
+			
+		},
+		activePct: function() {
+			var numActive = 0;
+			var totalThreads = Threads.find({current:Session.get("currentEvent")}).fetch().length;
+			var unresolved = Threads.find({current:Session.get("currentEvent"),old:false}).fetch();
+			for (var i = 0; i < unresolved.length; i++) {
+				if (unresolved[i].responses.length!=0) {
+					numActive++;
+				}
+			}
+			var activePercent = numActive/totalThreads*100;
+			console.log(activePercent + "%");
+			return activePercent + "%";			
+		},
+		oldPct: function() {
+			var totalThreads = Threads.find({current:Session.get("currentEvent")}).fetch().length;
+			var resolved = Threads.find({current:Session.get("currentEvent"),old:true}).fetch().length;
+			var oldPercent = resolved/totalThreads*100;
+			console.log(oldPercent + "%");
+			return oldPercent + "%";			
 		}
 	});
 	
@@ -68,7 +102,7 @@ if (Meteor.isClient) {
 				createdAt: new Date(), // current time
                 createdBy: currentUserId,
 				responses: [],
-				active: true,
+				old: false,
                 current: Session.get("currentEvent")
 			});
 			e.target.thread.value = ""; //clear form
@@ -87,7 +121,6 @@ if (Meteor.isClient) {
 		},
 		canDeleteResponse: function() {
 			return this.createdById==Meteor.userId();
-
 		}
 	});
 
@@ -120,7 +153,7 @@ if (Meteor.isClient) {
 			e.target.response.value = "";
 		},
 		"click .done": function() {
-			Threads.update(this._id, {$set: {active: !this.active}});
+			Threads.update(this._id, {$set: {old: !this.old}});
 		}
 	});
 	
@@ -195,11 +228,11 @@ if (Meteor.isClient) {
 			var endT = event.target.endTime.value;
 			var userId = Meteor.userId();
 			var userName = Meteor.user().profile.firstName + " " + Meteor.user().profile.lastName;
-            var share= event.target.eShare.value;
-            var cleanedShare=share.split(';');
-            for (var i in cleanedShare){
-                cleanedShare[i]=cleanedShare[i].trim();
-            }
+            // var share= event.target.eShare.value;
+            // var cleanedShare=share.split(';');
+            // for (var i in cleanedShare){
+                // cleanedShare[i]=cleanedShare[i].trim();
+            // }
             $(".eventsForm")[0].reset();
 			Events.insert({
 				name: eName,
@@ -207,7 +240,7 @@ if (Meteor.isClient) {
 				startTime: startT,
 				endTime: endT,
 				createdBy: userId,
-                sharedWith: cleanedShare,
+                // sharedWith: cleanedShare,
 				coordinator: userName
 			});
 		},

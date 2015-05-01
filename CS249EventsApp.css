@@ -28,6 +28,11 @@ button.deleteSchedule {
 	border: none !important;
 	color: gray !important;
 }
+
+div.progress-bar-gray {
+	background-color: gray !important;
+	border-color: gray !important;
+}
     
 #coordinator, #participant {
     background-color: #3399FF;
@@ -73,8 +78,8 @@ ul {
 }
 
 .oldQuestion {
-	background-color: #bbb !important;
-	border-color: #bbb !important;
+	background-color: gray !important;
+	border-color: gray !important;
 }
 
 .oldQuestion > .done {

@@ -65,16 +65,21 @@
 	{{> currentEvent}}
 	<section>
 		<div>
-			<form class="new-thread form-horizontal" style="padding-bottom: 40px !important;">
+			<form class="new-thread form-horizontal" style="padding-bottom: 20px !important;">
 					<input class="form-control input-lg" type="text" name="thread" placeholder="Ask a question" />
 			</form>
-            <ul class='col-md-6'>
-			  {{#each resolvedThreads}}
+			<div class="progress">
+				<div class="progress-bar progress-bar-warning" style="width: {{newPct}}">NEW</div>
+				<div class="progress-bar" style="width: {{activePct}}">UNRESOLVED</div>
+				<div class="progress-bar progress-bar-gray" style="width: {{oldPct}}">RESOLVED</div>
+			</div>
+			<ul class="col-md-6">
+			  {{#each unresolvedThreads}}
 				{{> oneThread}}
 			  {{/each}}
 			</ul>
-			<ul class='col-md-6'>
-			  {{#each unresolvedThreads}}
+			<ul class="col-md-6">
+			  {{#each resolvedThreads}}
 				{{> oneThread}}
 			  {{/each}}
 			</ul>
@@ -85,7 +90,7 @@
     
 <template name="oneThread">
 	<div class="list-group">
-		<li class="list-group-item {{#if this.active}}active{{else}}oldQuestion{{/if}} {{#if newQ}}newQuestion{{/if}}">
+		<li class="list-group-item active {{#if this.old}}oldQuestion{{/if}} {{#if newQ}}newQuestion{{/if}}">
 			{{text}}  
 			<button type="button" class="close done">✓</button>
 			{{#if canDeleteThread}}<button type="button" class="close deleteThread">×</button>{{/if}}
@@ -198,14 +203,14 @@
 					</span>
 				</div>
 			</div>
-            <div class="form-group">
+            <!-- <div class="form-group">
 				<label for="share" class="col-lg-3 control-label">Share With</label>
 				<div class="col-lg-9">
 					<textarea class="form-control" rows="3" id="share" name="eShare"></textarea>
 					<span class="help-block">Add an e-mail to share the event (for multiple people, please separate e-mails with semi-colon).
                     </span>
 				</div>
-			</div>
+			</div> -->
 			<script type="text/javascript">
 				$(function () {
 					$('#endTime').datetimepicker();
@@ -235,8 +240,8 @@
 					<strong>Description:</strong> {{this.description}} <br><br>
 					<strong>Start Time:</strong> {{this.startTime}} <br><br>
 					<strong>End Time:</strong> {{this.endTime}} <br><br>
-					<strong>Created by:</strong> {{this.coordinator}} <br><br>
-					<strong>Shared with:</strong> {{this.cleanedShare}} <br><br>
+					<strong>Created by:</strong> {{this.coordinator}} <!-- <br><br> -->
+					<!-- <strong>Shared with:</strong> {{this.cleanedShare}} <br><br> -->
 				</div>
 			</div>
 		</div>
