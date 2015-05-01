@@ -4,6 +4,7 @@ Events = new Mongo.Collection("events");
 Calendar = new Mongo.Collection("calendar");
 
 if (Meteor.isClient) {
+    //default page is addEvents page
 	Session.set('currentPage', 'addEvents');
 	Session.set('currentEvent', null);
 	
@@ -173,7 +174,10 @@ if (Meteor.isClient) {
 		userHasAccess: function() {
 			var event = Events.findOne({"_id": Session.get("currentEvent")});
 			return Meteor.userId()==event.createdBy;
-		}
+		},
+        sortSchedule: function(){
+            return Calendar.find({}, {sort: {millsec: 1}});
+        }
 	});
 	
 	Template.schedule.events({
@@ -185,12 +189,14 @@ if (Meteor.isClient) {
             Calendar.insert({
 				task: eventName,
 				location: location,
-				time: time,
+                time: time,
+				millsec: new Date(time).getTime(), //time in milliseconds
 				createdBy: userId,
                 current: Session.get("currentEvent")
 			});          
         },
         "keypress #inputLocation": function (event) {
+            //detects enter key
 			if (event.which == 13) {
 				var eventName = document.getElementById("inputEvent").value;
 				var location = document.getElementById("inputLocation").value;
@@ -200,6 +206,7 @@ if (Meteor.isClient) {
                     task: eventName,
                     location: location,
                     time: time,
+                    millsec: new Date(time).getTime(),
                     createdBy: userId,
                     current: Session.get("currentEvent")
 				});  
@@ -233,7 +240,7 @@ if (Meteor.isClient) {
             // for (var i in cleanedShare){
                 // cleanedShare[i]=cleanedShare[i].trim();
             // }
-            $(".eventsForm")[0].reset();
+            $(".eventsForm")[0].reset(); //resets form
 			Events.insert({
 				name: eName,
 				description: eDescript,
