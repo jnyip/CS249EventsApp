@@ -26,35 +26,38 @@
 			{{#if addEventsPage}}{{> addEvents}}{{/if}}
 			{{#if attendEventPage}}{{> attendEvent}}{{/if}}
 		{{else}}
-			{{> plsLogin}}
+			{{> home}}
 		{{/if}}
 		
 	</div>
 </body>
 
-<template name="plsLogin">
-	<div class="jumbotron alert-danger alert">
-		<h1 class="text-center">Please log in</h1>
-	</div>
-</template>
-
 <template name="home">
 	<div class="jumbotron">
-		<h1>Event Organizer!</h1>
-		<p>Blah blah blah, this will eventually look like a home page someday.</p>
-		<p><a class="btn btn-primary btn-lg" href="#" role="button">Unnecessary button?</a></p>
-	</div>
+		<h1 style="color: #428bca; text-align: center">Event Organizer!</h1>
+		<h2>Welcome to our events organizing system. As you hold your amazing 
+            event, you do not need to worry about whether your participants
+            have any problems. They can contact you in our simply application!
+        </h2>
+        <h2>Simply add your events to our system, and your participants will be able to ask questions, recieve help and keep up to date with your latest schedule. 
+        </h2>
+        <h2>Join us now to revolutionize the way you hold your event. We wish you the best of luck on your programs! 
+        </h2>
+    </div>
+        
+    <p style="color: grey; text-align: right">This is brought to you by: Ella Chao, Priscilla Lee, and Jamie Yip.<br> CS249: Web Mashups Team Project Spring 2015</p>
+
 </template>
 
 <template name="noCurrentEvent">
 	<div class="alert alert-danger">
-		<h4>Please <a class="alert-link" id="attendEvent">select an event to attend</a></h4>
+		<h3 style = "margin:10px !important">Please <a class="alert-link" id="attendEvent">select an event to attend</a></h3>
 	</div>	
 </template>
 
 <template name="currentEvent">
 	<div class="alert alert-success">
-		<h4>Event: {{currentEvent}}</h4>
+		<h3 style = "margin:10px !important">Event: {{currentEvent}}</h3>
 	</div>
 </template>
 
@@ -151,10 +154,10 @@
 			{{/if}}
 			{{#each sortSchedule}}
 			<tr>
-				<td>{{timeDateString}}</td>
-				<td>{{this.task}}</td>
-				<td>{{this.location}}</td>
-				<td>{{#if userHasAccess}}<button type="button" class="btn btn-default remove deleteSchedule">×</button>{{/if}}</td>
+				<td style="width: 20%;">{{timeDateString}}</td>
+				<td style="width: 40%;">{{this.task}}</td>
+				<td style="width: 35%;">{{this.location}}</td>
+				<td style="width: 5%;">{{#if userHasAccess}}<button type="button" class="btn btn-default remove deleteSchedule">×</button>{{/if}}</td>
 			</tr>
 			{{/each}}
         </tbody>

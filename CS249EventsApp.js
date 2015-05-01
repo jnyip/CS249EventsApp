@@ -5,7 +5,7 @@ Calendar = new Mongo.Collection("calendar");
 
 if (Meteor.isClient) {
     //default page is addEvents page
-	Session.set('currentPage', 'addEvents');
+	Session.set('currentPage', 'attendEvent');
 	Session.set('currentEvent', null);
 	
 	/*******************************************************************************
@@ -200,7 +200,7 @@ if (Meteor.isClient) {
 			if (event.which == 13) {
 				var eventName = document.getElementById("inputEvent").value;
 				var location = document.getElementById("inputLocation").value;
-				var time = document.getElementById("datepicker").value;
+				var time = document.getElementById("dateinput").value;
 				var userId = Meteor.userId();
 				Calendar.insert({
                     task: eventName,
