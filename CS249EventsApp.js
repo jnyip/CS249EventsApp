@@ -81,29 +81,41 @@ if (Meteor.isClient) {
 	Template.oneThread.helpers({
 		newQ: function() {
 			return this.responses.length==0;
+		},
+		canDeleteThread: function() {
+			return this.createdBy==Meteor.userId();
+		},
+		canDeleteResponse: function() {
+			return this.createdById==Meteor.userId();
+
 		}
 	});
 
 	Template.oneThread.events({
-		"click .delete": function () {
+		"click .deleteThread": function () {
 			Threads.remove(this._id);
+		},
+		"click .deleteResponse": function () {
+			Threads.update(this.thread, {$pull: {responses: this}});
 		},
 		"submit .new-response": function(e){
 			e.preventDefault();
 			var text = e.target.response.value;
             var userStatus = "";
-            if (Meteor.user().profile.coordinator){
-                userStatus = "Coordinator";
-            } else {
-                userStatus = "Participant";
-            }
+			var event = Events.findOne({"_id": Session.get("currentEvent")});
+            if (Meteor.userId()==event.createdBy){userStatus = "(Coordinator)";} 
             var currentUser = Meteor.user().profile.firstName + " " 
-                                + Meteor.user().profile.lastName + ", " 
+                                + Meteor.user().profile.lastName + " " 
                                 + userStatus;
             var completeText = text + " - " + currentUser;
 			Threads.update(this._id, {
-                $push: {createdby: currentUser, 
-                        responses: completeText}
+				$push: {responses: 
+					{createdby: currentUser, 
+					createdById: Meteor.userId(),
+					text: completeText,
+					date: new Date(),
+					thread: this._id}
+				}
             });
 			e.target.response.value = "";
 		},

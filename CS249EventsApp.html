@@ -88,10 +88,13 @@
 		<li class="list-group-item {{#if this.active}}active{{else}}oldQuestion{{/if}} {{#if newQ}}newQuestion{{/if}}">
 			{{text}}  
 			<button type="button" class="close done">✓</button>
-			<button type="button" class="close delete">×</button>
+			{{#if canDeleteThread}}<button type="button" class="close deleteThread">×</button>{{/if}}
 		</li>
 		{{#each this.responses}}
-			<li class="list-group-item">{{this}}</li>
+			<li class="list-group-item">
+				{{this.text}}
+				{{#if canDeleteResponse}}<button type="button" class="close deleteResponse">×</button>{{/if}}
+			</li>
 		{{/each}}
 		<li class="list-group-item">
 			<form class="new-response form-horizontal">
@@ -146,7 +149,7 @@
 				<td>{{timeDateString}}</td>
 				<td>{{this.task}}</td>
 				<td>{{this.location}}</td>
-				<td>{{#if userHasAccess}}<button type="button" class="btn btn-default btn-sm remove">×</button>{{/if}}</td>
+				<td>{{#if userHasAccess}}<button type="button" class="btn btn-default remove deleteSchedule">×</button>{{/if}}</td>
 			</tr>
 			{{/each}}
         </tbody>

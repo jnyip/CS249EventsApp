@@ -6,13 +6,27 @@ button.close {
     text-shadow: none !important;
     margin-left: 5px;
 }
+
 button.done:hover {
     color: green !important;
     opacity: 0.5 !important;
 }
-button.delete:hover {
+
+button.delete:hover, button.deleteThread:hover, button.deleteResponse:hover, button.remove:hover {
     color: red !important;
     opacity: 0.5 !important;
+}
+
+button.deleteResponse, button.remove {
+	color: gray !important;
+	background-color:rgba(0, 0, 0, 0) !important;
+}
+
+button.deleteSchedule {
+	padding: 0px 12px !important;
+	background-color:rgba(0, 0, 0, 0) !important;
+	border: none !important;
+	color: gray !important;
 }
     
 #coordinator, #participant {
