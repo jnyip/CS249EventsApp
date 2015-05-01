@@ -244,8 +244,11 @@ if (Meteor.isClient) {
 			Events.insert({
 				name: eName,
 				description: eDescript,
+                millsec: new Date(startT).getTime(),
 				startTime: startT,
+                startDate: new Date(startT).toLocaleDateString(),
 				endTime: endT,
+                endDate: new Date(endT).toLocaleDateString(),
 				createdBy: userId,
                 // sharedWith: cleanedShare,
 				coordinator: userName
@@ -261,7 +264,7 @@ if (Meteor.isClient) {
 	 *******************************************************************************/
 	Template.attendEvent.helpers({
 		events: function() {
-			return Events.find().fetch();
+			return Events.find({}, {sort: {millsec: 1}});
 		},
 		noEvent: function() {
 			return (Session.get("currentEvent")==null);

@@ -91,3 +91,9 @@ ul {
 	padding-left: 15px !important;
 	padding-right: 15px !important;
 }
+
+.label{
+    padding: 0.9em !important;
+    padding-top: 1.1em !important;
+    margin-left: -15px !important;
+}

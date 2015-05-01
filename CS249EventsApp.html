@@ -262,11 +262,13 @@
 		{{#each events}}
 		<div class="panel panel-default">
 			<div class="panel-heading selectEvent pointer" data-toggle="collapse" data-parent="#accordion" href="#{{this._id}}">
-				<h4 class="panel-title">{{this.name}}</h4>
+				<h3 class="panel-title">
+                    <span class="label label-info" style="margin-right: 10px !important">{{this.startDate}}-{{this.endDate}}</span>{{this.name}}</h3>
 			</div>
 			<div id="{{this._id}}" class="panel-collapse collapse" role="tabpanel">
 				<div class="panel-body">
-				{{this.description}}
+                    <strong>Description:</strong> {{this.description}} <br><br>
+					<strong>Created by:</strong> {{this.coordinator}}
 				</div>
 			</div>
 		</div>
