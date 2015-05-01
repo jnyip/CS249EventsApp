@@ -200,7 +200,7 @@ if (Meteor.isClient) {
 			if (event.which == 13) {
 				var eventName = document.getElementById("inputEvent").value;
 				var location = document.getElementById("inputLocation").value;
-				var time = document.getElementById("datepicker").value;
+				var time = document.getElementById("dateinput").value;
 				var userId = Meteor.userId();
 				Calendar.insert({
                     task: eventName,

@@ -54,7 +54,7 @@
 
 <template name="currentEvent">
 	<div class="alert alert-success">
-		<h4>Event: {{currentEvent}}</h4>
+		<h3>Event: {{currentEvent}}</h3>
 	</div>
 </template>
 
@@ -78,7 +78,7 @@
 				{{> oneThread}}
 			  {{/each}}
 			</ul>
-			<ul class="col-md-6">
+			<ul class="col-md-6" id='resolved'>
 			  {{#each resolvedThreads}}
 				{{> oneThread}}
 			  {{/each}}
