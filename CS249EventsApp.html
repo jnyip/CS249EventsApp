@@ -13,6 +13,7 @@ Goal: HTML for Events Organizer App
 			<a class="navbar-brand pointer {{#if homePage}}activePage{{/if}}" id="home">Events Organizer</a>
 		</div>
 		<div class="navbar-collapse collapse">
+            <!--checks if user is logged in-->
 			{{#if currentUser}}
             <a class="navbar-brand pointer {{#if addEventsPage}}activePage{{/if}}" id="addEvents">Add an Event</a>
 			<a class="navbar-brand pointer {{#if attendEventPage}}activePage{{/if}}" id="attendEvent">Attend an Event</a>
@@ -25,6 +26,7 @@ Goal: HTML for Events Organizer App
     
 	<div class="container-fluid">
 		{{#if currentUser}}
+        <!--displays corresponding pages when users click on tabs-->
 			{{#if homePage}}{{> home}}{{/if}}
 			{{#if quickHelpPage}}{{> quickHelp}}{{/if}}
 			{{#if schedulePage}}{{> schedule}}{{/if}}
@@ -37,6 +39,7 @@ Goal: HTML for Events Organizer App
 	</div>
 </body>
 
+<!--Template for home page-->
 <template name="home">
 	<div class="jumbotron">
 		<h1 style="color: #428bca; text-align: center">Event Organizer!</h1>
@@ -58,19 +61,23 @@ Goal: HTML for Events Organizer App
 
 </template>
 
+<!--Template when user has not selected an event-->
 <template name="noCurrentEvent">
 	<div class="alert alert-danger">
 		<h3 style = "margin:10px !important">Please <a class="alert-link" id="attendEvent">select an event to attend</a></h3>
 	</div>	
 </template>
 
+<!--Template that displays which event is selected-->
 <template name="currentEvent">
 	<div class="alert alert-success">
 		<h3 style = "margin:10px !important">Event: {{currentEvent}}</h3>
 	</div>
 </template>
 
+<!--Template for quick help board-->
 <template name="quickHelp">
+    <!--Each event has its own quick help board so the following conditionals check for which event is selected-->
 	{{#if noEvent}}
 	{{> noCurrentEvent}}
 	{{else}}
@@ -85,6 +92,7 @@ Goal: HTML for Events Organizer App
 				<div class="progress-bar" style="width: {{activePct}}">UNRESOLVED</div>
 				<div class="progress-bar progress-bar-gray" style="width: {{oldPct}}">RESOLVED</div>
 			</div>
+            <!--Messages are sorted into two categories, resolved and unresolved-->
 			<ul class="col-md-6">
 			  {{#each unresolvedThreads}}
 				{{> oneThread}}
@@ -99,17 +107,21 @@ Goal: HTML for Events Organizer App
 	</section>
 	{{/if}}
 </template>
-    
+
+<!--Template for individual messages-->
 <template name="oneThread">
 	<div class="list-group">
 		<li class="list-group-item active {{#if this.old}}oldQuestion{{/if}} {{#if newQ}}newQuestion{{/if}}">
 			{{text}}  
 			<button type="button" class="close done">✓</button>
+            <!--only the creator of the message is allowed to deleted messages-->
+            <!--Displays button that deletes the entire conversation-->
 			{{#if canDeleteThread}}<button type="button" class="close deleteThread">×</button>{{/if}}
 		</li>
 		{{#each this.responses}}
 			<li class="list-group-item">
 				{{this.text}}
+                <!--displays button that deletes an individual message-->
 				{{#if canDeleteResponse}}<button type="button" class="close deleteResponse">×</button>{{/if}}
 			</li>
 		{{/each}}
@@ -121,6 +133,7 @@ Goal: HTML for Events Organizer App
 	</div>
 </template>
 
+<!--Template for schedule-->
 <template name="schedule">
 	{{#if noEvent}}
 	{{> noCurrentEvent}}
@@ -135,6 +148,7 @@ Goal: HTML for Events Organizer App
             </tr>
         </thead>
         <tbody>
+            <!--Only creator of event is allowed to edit the schedule-->
 			{{#if userHasAccess}}
 			<tr class="info">
 				<td style="width: 20%;">
@@ -144,6 +158,7 @@ Goal: HTML for Events Organizer App
 						<span class="glyphicon glyphicon-calendar"></span>
 					</span>
 					</div>
+                    <!--makes datepicker-->
 					<script type="text/javascript">
 						$(function () {
 							$('#datepicker').datetimepicker();
@@ -161,12 +176,15 @@ Goal: HTML for Events Organizer App
 				</td>
 			</tr>
 			{{/if}}
+            <!--Displays events in a schedule-->
 			{{#each sortSchedule}}
 			<tr>
 				<td style="width: 20%;">{{timeDateString}}</td>
 				<td style="width: 40%;">{{this.task}}</td>
 				<td style="width: 35%;">{{this.location}}</td>
-				<td style="width: 5%;">{{#if userHasAccess}}<button type="button" class="btn btn-default remove deleteSchedule">×</button>{{/if}}</td>
+				<td style="width: 5%;">{{#if userHasAccess}}<button type="button" class="btn btn-default remove deleteSchedule">×</button>
+            {{/if}}
+                </td>
 			</tr>
 			{{/each}}
         </tbody>
@@ -174,8 +192,10 @@ Goal: HTML for Events Organizer App
 	{{/if}}
 </template>
 
+<!--Template for adding events-->
 <template name="addEvents">
 	<div class="col-md-6">
+        <!--Form that allows user to create an event-->
 		<form class="form-horizontal well eventsForm">
 		<fieldset>
 			<legend>Add an Event</legend>
@@ -242,6 +262,7 @@ Goal: HTML for Events Organizer App
 		<div class="list-group">
 			<li class="list-group-item active">Your Events</li>
 		</div>
+        <!--dislay events created by the user-->
 		{{#each usersEvents}}
 		<div class="panel panel-default">
 			<div class="panel-heading pointer" data-toggle="collapse" data-parent="#accordion" href="#{{this._id}}">
@@ -261,6 +282,7 @@ Goal: HTML for Events Organizer App
 	</div>
 </template>
 
+<!--Template for attending events-->
 <template name="attendEvent">
 	{{#if noEvent}}
 	{{> noCurrentEvent}}
@@ -271,6 +293,7 @@ Goal: HTML for Events Organizer App
 		<div class="list-group" style="margin-bottom: 5px !important;">
 			<li class="list-group-item active">List of Events</li>
 		</div>
+        <!--Display list of available events-->
 		{{#each events}}
 		<div class="panel panel-default">
 			<div class="panel-heading selectEvent pointer" data-toggle="collapse" data-parent="#accordion" href="#{{this._id}}">
