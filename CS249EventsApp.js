@@ -162,9 +162,6 @@ if (Meteor.isClient) {
 	 * TEMPLATE SCHEDULE: allows user to view (or add) to schedule for the selected event
 	 *******************************************************************************/
 	Template.schedule.helpers({
-		calendar: function() {
-			return Calendar.find({current:Session.get("currentEvent")}).fetch();
-		},
 		timeDateString: function() {
 			return this.time; //.toLocaleDateString();
 		},
@@ -176,7 +173,7 @@ if (Meteor.isClient) {
 			return Meteor.userId()==event.createdBy;
 		},
         sortSchedule: function(){
-            return Calendar.find({}, {sort: {millsec: 1}});
+            return Calendar.find({current:Session.get("currentEvent")}, {sort: {millsec: 1}});
         }
 	});
 	
