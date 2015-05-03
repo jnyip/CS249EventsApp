@@ -1,3 +1,12 @@
+/* Filename: CS249EventsApp.js
+Author: Ella Chao, Priscilla Lee, Jamie Yip
+Date: May 3, 2015
+Goal: JavaScript for Events Organizer App
+
+Honor Code Statement:
+On this task we all helped each other, and everyone worked on everything.
+All code was written by all memember of the group.
+*/
 //our MongoDB collections
 Threads = new Mongo.Collection("threads");
 Events = new Mongo.Collection("events");
