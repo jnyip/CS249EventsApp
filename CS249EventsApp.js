@@ -5,22 +5,24 @@ Goal: JavaScript for Events Organizer App
 
 Honor Code Statement:
 On this task we all helped each other, and everyone worked on everything.
+Expanding Log in information is from ian:accounts-ui-bootstrap-3. 
 All code was written by all memember of the group.
 */
 //our MongoDB collections
-Threads = new Mongo.Collection("threads");
-Events = new Mongo.Collection("events");
-Calendar = new Mongo.Collection("calendar");
+Threads = new Mongo.Collection("threads"); // Stores conversations from quickhelp board
+Events = new Mongo.Collection("events"); // Stores events created by coordinators
+Calendar = new Mongo.Collection("calendar"); // Stores schedules for events
 
 if (Meteor.isClient) {
     //default page is addEvents page
-	Session.set('currentPage', 'attendEvent');
-	Session.set('currentEvent', null);
+	Session.set('currentPage', 'attendEvent'); //Default logged in page is attendEvents
+	Session.set('currentEvent', null); // User logs into and has not selected an event yet
 	
 	/*******************************************************************************
 	 * TEMPLATE BODY: only takes care of the navbar
 	 *******************************************************************************/
 	Template.body.helpers({
+        // For the navbar
         homePage: function() {return Session.get('currentPage')=='home';},
         quickHelpPage: function() {return Session.get('currentPage')=='quickHelp';},
         schedulePage: function() {return Session.get('currentPage')=='schedule';},
@@ -29,6 +31,7 @@ if (Meteor.isClient) {
     });
     
     Template.body.events({
+        // For the navbar
 		"click #home": function() {Session.set('currentPage', 'home');},
 		"click #quickHelp": function() {Session.set('currentPage', 'quickHelp');},
 		"click  #schedule": function() {Session.set('currentPage', 'schedule');},
@@ -65,6 +68,7 @@ if (Meteor.isClient) {
 			return (Session.get("currentEvent")==null);
 		},
 		newPct: function() {
+            // For the progress bar on the quickhelp page
 			var numNew = 0;
 			var totalThreads = Threads.find({current:Session.get("currentEvent")}).fetch().length;
 			var unresolved = Threads.find({current:Session.get("currentEvent"),old:false}).fetch();
@@ -75,10 +79,12 @@ if (Meteor.isClient) {
 			}
 			var newPercent = numNew/totalThreads*100;
 			console.log(newPercent+"%");
+            // returns the precent of new questions 
 			return newPercent + "%";	
 			
 		},
 		activePct: function() {
+            // For the progress bar on the quickhelp page
 			var numActive = 0;
 			var totalThreads = Threads.find({current:Session.get("currentEvent")}).fetch().length;
 			var unresolved = Threads.find({current:Session.get("currentEvent"),old:false}).fetch();
@@ -89,6 +95,7 @@ if (Meteor.isClient) {
 			}
 			var activePercent = numActive/totalThreads*100;
 			console.log(activePercent + "%");
+            // returns the percent of active questions (questions answered but not resolved)
 			return activePercent + "%";			
 		},
 		oldPct: function() {
@@ -96,11 +103,14 @@ if (Meteor.isClient) {
 			var resolved = Threads.find({current:Session.get("currentEvent"),old:true}).fetch().length;
 			var oldPercent = resolved/totalThreads*100;
 			console.log(oldPercent + "%");
+            //returns the percent of resolved questions
 			return oldPercent + "%";			
 		}
 	});
 	
 	Template.quickHelp.events({
+        // Creating a new thread to post a new question
+        // Contains the inputed text, user information, and responses
 		"submit .new-thread": function(e){
 			e.preventDefault(); //prevents default form submit
 			var text = e.target.thread.value;
@@ -113,7 +123,7 @@ if (Meteor.isClient) {
                 createdBy: currentUserId,
 				responses: [],
 				old: false,
-                current: Session.get("currentEvent")
+                current: Session.get("currentEvent") //This stores the event this thread belongs to
 			});
 			e.target.thread.value = ""; //clear form
 		}
@@ -141,6 +151,7 @@ if (Meteor.isClient) {
 		"click .deleteResponse": function () {
 			Threads.update(this.thread, {$pull: {responses: this}});
 		},
+        //User can event to question/ongoing conversation, will include the info of the user
 		"submit .new-response": function(e){
 			e.preventDefault();
 			var text = e.target.response.value;
@@ -172,7 +183,7 @@ if (Meteor.isClient) {
 	 *******************************************************************************/
 	Template.schedule.helpers({
 		timeDateString: function() {
-			return this.time; //.toLocaleDateString();
+			return this.time;
 		},
 		noEvent: function() {
 			return (Session.get("currentEvent")==null);
@@ -182,11 +193,13 @@ if (Meteor.isClient) {
 			return Meteor.userId()==event.createdBy;
 		},
         sortSchedule: function(){
-            return Calendar.find({current:Session.get("currentEvent")}, {sort: {millsec: 1}});
+            //Millseconds allows us to sort by time
+            return Calendar.find({current:Session.get("currentEvent")}, {sort: {millsec: 1}}); 
         }
 	});
 	
 	Template.schedule.events({
+        // Retrieves form input and adds new event to schedule 
 		"click .add": function() {
             var eventName = document.getElementById("inputEvent").value;
             var location = document.getElementById("inputLocation").value;
@@ -201,8 +214,8 @@ if (Meteor.isClient) {
                 current: Session.get("currentEvent")
 			});          
         },
+        //Allows user to submit form using enter key
         "keypress #inputLocation": function (event) {
-            //detects enter key
 			if (event.which == 13) {
 				var eventName = document.getElementById("inputEvent").value;
 				var location = document.getElementById("inputLocation").value;
@@ -233,6 +246,8 @@ if (Meteor.isClient) {
 	});
 	
     Template.addEvents.events({
+        // Allows the user to create an event and associates the current user to the event
+        // as the coordinator
 		"submit .eventsForm": function(event) {
 			event.preventDefault();
 			var eName = event.target.eName.value;
@@ -241,11 +256,6 @@ if (Meteor.isClient) {
 			var endT = event.target.endTime.value;
 			var userId = Meteor.userId();
 			var userName = Meteor.user().profile.firstName + " " + Meteor.user().profile.lastName;
-            // var share= event.target.eShare.value;
-            // var cleanedShare=share.split(';');
-            // for (var i in cleanedShare){
-                // cleanedShare[i]=cleanedShare[i].trim();
-            // }
             $(".eventsForm")[0].reset(); //resets form
 			Events.insert({
 				name: eName,
@@ -288,9 +298,11 @@ if (Meteor.isClient) {
 
 	/*******************************************************************************
 	 * ACCOUNTS: manages accounts and passwords and stuff
+     * From the ian:accounts-ui-bootstrap-3 demo
 	 *******************************************************************************/
 	Accounts.ui.config({
 		requestPermissions: {},
+        // Allows users to give first name and Last name 
 		extraSignupFields: [{
 			fieldName: 'firstName',
 			fieldLabel: 'First name',
